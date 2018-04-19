@@ -6,12 +6,7 @@ public class Building : MonoBehaviour
 {
     int MaxProducts = 999;
     int CurrentProductAmount = 0;
-    
-    protected void Spawn(Vector3 spawnPoint, Quaternion rotation)
-    {
-        //TODO: Fetch from pool
-        //TODO: Move to location
-    }
+    GameObject ParentTile;
 
     protected void OnGUI()
     {
@@ -20,15 +15,24 @@ public class Building : MonoBehaviour
 
     protected void AddOneProduct()
     {
-
+        CurrentProductAmount++;
     }
     protected void RemoveOneProduct()
     {
-
+        CurrentProductAmount--;
     }
 
     public void SetMaxProductAmount(int max)
     {
         MaxProducts = max;
+    }
+
+    public GameObject GetParentTile()
+    {
+        return ParentTile;
+    }
+    public void SetParentTile(GameObject tile)
+    {
+        ParentTile = tile;
     }
 }

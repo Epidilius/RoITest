@@ -29,7 +29,7 @@ public class Consumer : Building
         throw new Exception();
     }
 
-    public void VehicleReturned()
+    public void VehicleArrived()
     {
         AddOneProduct();
         CurrentVehicleAmount--;

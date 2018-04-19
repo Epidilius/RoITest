@@ -4,70 +4,21 @@ using UnityEngine;
 
 public class WorldBuilder : MonoBehaviour
 {
-    //TODO: Move the Vehicle stuff to Consumer?
     #region VARIABLES 
-    Vector2 WorldSize = new Vector2(50, 50);
-
-    //TILES 
-    public GameObject GroundTile;
-    public GameObject RoadTile;
-    public GameObject EndpointTile;
-
-    ResourcePool GroundTilePool;
-    ResourcePool RoadTilePool;
-    ResourcePool EndpointTilePool;
-
-    //BUILDINGS 
-    public GameObject ConsumerBuilding;
-    public GameObject ProducerBuilding;
-
-    ResourcePool ConsumerPool;
-    ResourcePool ProducerPool;
-
-    int NumberOfProducers = 2;
-    int NumberOfConsumers = 5;
-
-    //VEHICLES 
-    public GameObject Vehicle;
-    ResourcePool VehiclePool;
-    int MaxVehiclesPerConsumer = 1;
+    [SerializeField] PoolBoss PoolBoss;
+    int TileSize = 5;   //TODO: Un-hard code this?
+    Vector3 TilePlacementPosition = Vector3.zero;
     #endregion
 
     // Use this for initialization
     void Start()
     {
-        SetupPools();
         CreateWorld();
-    }
-
-    //POOL CREATION FUNCTIONS 
-    void SetupPools()
-    {
-        var totalTilesInWorld = (int)(WorldSize.x * WorldSize.y);
-        GroundTilePool = new ResourcePool(totalTilesInWorld, GroundTile);
-        RoadTilePool = new ResourcePool(totalTilesInWorld, RoadTile);
-        EndpointTilePool = new ResourcePool(totalTilesInWorld, EndpointTile);
-
-        ConsumerPool = new ResourcePool(NumberOfConsumers, ConsumerBuilding);
-        ProducerPool = new ResourcePool(NumberOfProducers, ProducerBuilding);
-
-        VehiclePool = new ResourcePool(MaxVehiclesPerConsumer * NumberOfConsumers, Vehicle);
-    }
-    void ResetPools()
-    {
-        GroundTilePool.ResetPool();
-        RoadTilePool.ResetPool();
-        EndpointTilePool.ResetPool();
-
-        ConsumerPool.ResetPool();
-        ProducerPool.ResetPool();
-
-        VehiclePool.ResetPool();
     }
 
     public void CreateWorld()
     {
-        ResetPools();   //Bool for first time play to skip this?
+        PoolBoss.ResetPools();   //Bool for first time play to skip this?
 
         SpawnGroundTiles();
 
@@ -82,22 +33,20 @@ public class WorldBuilder : MonoBehaviour
     //TILE FUNCTIONS
     void SpawnGroundTiles()
     {
-        //TODO: Pick one of these
-        for(int i = 0; i < WorldSize.x * WorldSize.y; i++)
+        for(int i = 0; i < Settings.GetWorldSize().x; i++)
         {
-            
-        }
-        for(int i = 0; i < WorldSize.x; i++)
-        {
-            for(int j = 0; j < WorldSize.y; j++)
+            TilePlacementPosition.x = TileSize * i;
+            for(int j = 0; j < Settings.GetWorldSize().y; j++)
             {
-
+                TilePlacementPosition.z = TileSize * j;
+                var tile = PoolBoss.GetGroundTile();
+                tile.transform.position = TilePlacementPosition;    //TODO: Make a func to place a passed object at a passed position?
             }
         }
     }
     void SpawnEndpointTiles()
     {
-        for(int i = 0; i < NumberOfConsumers + NumberOfProducers; i++)
+        for(int i = 0; i < Settings.GetNumberOfConsumers() + Settings.GetNumberOfProducers(); i++)
         {
             //TODO: Get the location of buildings, pick a side at random, place an endpoint so the trigger is as close to the building as possible in terms of rotations
         }
