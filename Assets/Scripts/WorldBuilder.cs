@@ -46,9 +46,30 @@ public class WorldBuilder : MonoBehaviour
     }
     void SpawnEndpointTiles()
     {
-        for(int i = 0; i < Settings.GetNumberOfConsumers() + Settings.GetNumberOfProducers(); i++)
+        for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
-            //TODO: Get the location of buildings, pick a side at random, place an endpoint so the trigger is as close to the building as possible in terms of rotations
+            var consumer = PoolBoss.GetUsedConsumerBuilding(i);
+            var endpoint = PoolBoss.GetUnusedEndpointTile();
+
+            var position = consumer.transform.position;
+            position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
+            position.y = 0.1f;
+            var rotation = Quaternion.identity; //TODO: Rotate based on position
+
+            SetPositionAndRotation(endpoint, position, rotation);
+        }
+        //TODO: Unduplicate this code
+        for(int i = 0; i < Settings.GetNumberOfProducers(); i++)
+        {
+            var producer = PoolBoss.GetUsedProducerBuilding(i);
+            var endpoint = PoolBoss.GetUnusedEndpointTile();
+
+            var position = producer.transform.position;
+            position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
+            position.y = 0.1f;
+            var rotation = Quaternion.identity; //TODO: Rotate based on position
+
+            SetPositionAndRotation(endpoint, position, rotation);
         }
     }
     void SpawnRoadTiles()

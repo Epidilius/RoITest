@@ -44,7 +44,7 @@ public class PoolBoss : MonoBehaviour
         var totalTilesInWorld = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);   //TODO: Do I still need the cast?
         GroundTilePool = new ResourcePool(totalTilesInWorld, GroundTile);
         RoadTilePool = new ResourcePool(totalTilesInWorld, RoadTile);
-        EndpointTilePool = new ResourcePool(totalTilesInWorld, EndpointTile);
+        EndpointTilePool = new ResourcePool(Settings.GetNumberOfConsumers() + Settings.GetNumberOfProducers(), EndpointTile);
 
         ConsumerPool = new ResourcePool(Settings.GetNumberOfConsumers(), ConsumerBuilding);
         ProducerPool = new ResourcePool(Settings.GetNumberOfProducers(), ProducerBuilding);
