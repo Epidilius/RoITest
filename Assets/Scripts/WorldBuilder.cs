@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WorldBuilder : MonoBehaviour
 {
+    //TODO: Move the Vehicle stuff to Consumer?
     #region VARIABLES 
     Vector2 WorldSize = new Vector2(50, 50);
 
@@ -36,6 +37,7 @@ public class WorldBuilder : MonoBehaviour
     void Start()
     {
         SetupPools();
+        CreateWorld();
     }
 
     //POOL CREATION FUNCTIONS 
@@ -61,5 +63,47 @@ public class WorldBuilder : MonoBehaviour
         ProducerPool.ResetPool();
 
         VehiclePool.ResetPool();
+    }
+
+    public void CreateWorld()
+    {
+        ResetPools();   //Bool for first time play to skip this?
+        SpawnTiles();
+        SpawnBuildings();
+    }
+
+    //TILE FUNCTIONS
+    void SpawnTiles()
+    {
+        SpawnGroundTiles();
+        SpawnRoadTiles();
+        SpawnEndpointTiles();
+    }
+    void SpawnGroundTiles()
+    {
+
+    }
+    void SpawnRoadTiles()
+    {
+
+    }
+    void SpawnEndpointTiles()
+    {
+
+    }
+
+    //BUILDING FUNCTIONS
+    void SpawnBuildings()
+    {
+        SpawnConsumers();
+        SpawnProducers();
+    }
+    void SpawnConsumers()
+    {
+
+    }
+    void SpawnProducers()
+    {
+
     }
 }
