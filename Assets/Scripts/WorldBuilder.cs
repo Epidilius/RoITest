@@ -4,30 +4,62 @@ using UnityEngine;
 
 public class WorldBuilder : MonoBehaviour
 {
+    #region VARIABLES 
     Vector2 WorldSize = new Vector2(50, 50);
 
-    //TILES
-    [SerializeField] GameObject GroundTile;
-    [SerializeField] GameObject RoadTile;
-    [SerializeField] GameObject EndpointTile;
+    //TILES 
+    public GameObject GroundTile;
+    public GameObject RoadTile;
+    public GameObject EndpointTile;
 
     ResourcePool GroundTilePool;
     ResourcePool RoadTilePool;
     ResourcePool EndpointTilePool;
 
+    //BUILDINGS 
+    public GameObject ConsumerBuilding;
+    public GameObject ProducerBuilding;
+
+    ResourcePool ConsumerPool;
+    ResourcePool ProducerPool;
+
+    int NumberOfProducers = 2;
+    int NumberOfConsumers = 5;
+
+    //VEHICLES 
+    public GameObject Vehicle;
+    ResourcePool VehiclePool;
+    int MaxVehiclesPerConsumer = 1;
+    #endregion
+
     // Use this for initialization
     void Start()
     {
-        var totalTilesInWorld = (int)(WorldSize.x * WorldSize.y);
+        SetupPools();
+    }
 
+    //POOL CREATION FUNCTIONS 
+    void SetupPools()
+    {
+        var totalTilesInWorld = (int)(WorldSize.x * WorldSize.y);
         GroundTilePool = new ResourcePool(totalTilesInWorld, GroundTile);
         RoadTilePool = new ResourcePool(totalTilesInWorld, RoadTile);
         EndpointTilePool = new ResourcePool(totalTilesInWorld, EndpointTile);
+
+        ConsumerPool = new ResourcePool(NumberOfConsumers, ConsumerBuilding);
+        ProducerPool = new ResourcePool(NumberOfProducers, ProducerBuilding);
+
+        VehiclePool = new ResourcePool(MaxVehiclesPerConsumer * NumberOfConsumers, Vehicle);
     }
-
-    // Update is called once per frame
-    void Update()
+    void ResetPools()
     {
+        GroundTilePool.ResetPool();
+        RoadTilePool.ResetPool();
+        EndpointTilePool.ResetPool();
 
+        ConsumerPool.ResetPool();
+        ProducerPool.ResetPool();
+
+        VehiclePool.ResetPool();
     }
 }
