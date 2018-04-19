@@ -7,7 +7,7 @@ public class ResourcePool : MonoBehaviour{
     int PoolSize;
     Vector3 UnusedPosition;
     List<GameObject> UnusedObjectPool;
-    List<GameObject> UsedObjectPool;    //TODO: Do I need this? 
+    List<GameObject> UsedObjectPool;
     GameObject PoolType;
 
     public ResourcePool(int size, GameObject objectPooled)
@@ -44,7 +44,7 @@ public class ResourcePool : MonoBehaviour{
         }
     }
 
-    public GameObject GetFirstUnusedObject()
+    public GameObject GetUnusedObject()
     {
         var item = UnusedObjectPool[0];
         SetStatusOfComponents(ref item, true);
@@ -53,6 +53,10 @@ public class ResourcePool : MonoBehaviour{
         UsedObjectPool.Add(item);
 
         return item;
+    }
+    public GameObject GetUsedObject(int index)
+    {
+        return UsedObjectPool[index];
     }
     public void RemoveItemFromUsedPool(GameObject item)
     {

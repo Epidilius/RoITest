@@ -64,29 +64,54 @@ public class PoolBoss : MonoBehaviour
     }
 
     //GET OBJECT FROM POOL
-    public GameObject GetGroundTile()
+    public GameObject GetUnusedGroundTile()
     {
-        return GroundTilePool.GetFirstUnusedObject();
+        return GroundTilePool.GetUnusedObject();
     }
-    public GameObject GetRoadTile()
+    public GameObject GetUnusedRoadTile()
     {
-        return RoadTilePool.GetFirstUnusedObject();
+        return RoadTilePool.GetUnusedObject();
     }
-    public GameObject GetEndpointTile()
+    public GameObject GetUnusedEndpointTile()
     {
-        return EndpointTilePool.GetFirstUnusedObject();
+        return EndpointTilePool.GetUnusedObject();
     }
-    public GameObject GetConsumerBuilding()
+    public GameObject GetUnusedConsumerBuilding()
     {
-        return ConsumerPool.GetFirstUnusedObject();
+        return ConsumerPool.GetUnusedObject();
     }
-    public GameObject GetProducerBuilding()
+    public GameObject GetUnusedProducerBuilding()
     {
-        return ProducerPool.GetFirstUnusedObject();
+        return ProducerPool.GetUnusedObject();
     }
-    public GameObject GetVehicle()
+    public GameObject GetUnusedVehicle()
     {
-        return VehiclePool.GetFirstUnusedObject();
+        return VehiclePool.GetUnusedObject();
+    }
+    //TODO: Can I make a single funciton like I did with the remove?
+    public GameObject GetUsedGroundTile(int index)
+    {
+        return GroundTilePool.GetUsedObject(index);
+    }
+    public GameObject GetUsedRoadTile(int index)
+    {
+        return RoadTilePool.GetUsedObject(index);
+    }
+    public GameObject GetUsedEndpointTile(int index)
+    {
+        return EndpointTilePool.GetUsedObject(index);
+    }
+    public GameObject GetUsedConsumerBuilding(int index)
+    {
+        return ConsumerPool.GetUsedObject(index);
+    }
+    public GameObject GetUsedProducerBuilding(int index)
+    {
+        return ProducerPool.GetUsedObject(index);
+    }
+    public GameObject GetUsedVehicle(int index)
+    {
+        return VehiclePool.GetUsedObject(index);
     }
 
     //RETURN OBJECT TO POOL

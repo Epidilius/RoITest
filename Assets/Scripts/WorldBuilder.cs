@@ -7,7 +7,7 @@ public class WorldBuilder : MonoBehaviour
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
     int TileSize = 5;   //TODO: Un-hard code this?
-    Vector3 TilePlacementPosition = Vector3.zero;
+    Vector3 TilePlacementPosition = Vector3.zero;   //TODO: Not a fan of this
     #endregion
 
     // Use this for initialization
@@ -39,8 +39,8 @@ public class WorldBuilder : MonoBehaviour
             for(int j = 0; j < Settings.GetWorldSize().y; j++)
             {
                 TilePlacementPosition.z = TileSize * j;
-                var tile = PoolBoss.GetGroundTile();
-                tile.transform.position = TilePlacementPosition;    //TODO: Make a func to place a passed object at a passed position?
+                var tile = PoolBoss.GetUnusedGroundTile();
+                SetPositionAndRotation(tile, TilePlacementPosition, Quaternion.identity);
             }
         }
     }
@@ -59,10 +59,55 @@ public class WorldBuilder : MonoBehaviour
     //BUILDING FUNCTIONS
     void SpawnConsumers()
     {
-        //TODO: Pick random tile, make sure there is nothing on the picked tile, place building in random rotation and position on the picked tile
+        int amountOfTiles = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);
+
+        for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
+        {
+            var consumer  = PoolBoss.GetUnusedConsumerBuilding();
+            GameObject tileToUse = null;
+            do
+            {
+                tileToUse = PoolBoss.GetUsedGroundTile(Random.Range(0, amountOfTiles));
+            } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
+            
+            consumer.GetComponent<Consumer>().SetParentTile(tileToUse);
+
+            //TODO: Change these up a bit
+            Quaternion rotation = tileToUse.transform.rotation;
+            Vector3 position = tileToUse.transform.position;
+            position.y = 0.5f;
+
+            SetPositionAndRotation(consumer, position, rotation);
+        }
     }
     void SpawnProducers()
     {
-        //TODO: Same as above
+        //TODO: Condese this duplicated code
+        int amountOfTiles = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);
+
+        for (int i = 0; i < Settings.GetNumberOfProducers(); i++)
+        {
+            var producer = PoolBoss.GetUnusedProducerBuilding();
+            GameObject tileToUse = null;
+            do
+            {
+                tileToUse = PoolBoss.GetUsedGroundTile(Random.Range(0, amountOfTiles));
+            } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
+
+            producer.GetComponent<Producer>().SetParentTile(tileToUse);
+
+            //TODO: Change these up a bit
+            Quaternion rotation = tileToUse.transform.rotation;
+            Vector3 position = tileToUse.transform.position;
+            position.y = 0.5f;
+
+            SetPositionAndRotation(producer, position, rotation);
+        }
+    }
+
+    void SetPositionAndRotation(GameObject gameObject, Vector3 position, Quaternion rotation)
+    {
+        gameObject.transform.position = position;
+        gameObject.transform.rotation = rotation;
     }
 }
