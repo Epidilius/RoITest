@@ -15,4 +15,13 @@ public class Vehicle : MonoBehaviour
     {
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Destination")
+        {
+            //TODO: Pause, then continue
+            //TODO: Differentiate between Consumer and Producer destinations. Maybe have two endpoint types?
+        }
+    }
 }

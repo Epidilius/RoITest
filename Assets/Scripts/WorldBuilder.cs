@@ -68,42 +68,52 @@ public class WorldBuilder : MonoBehaviour
     public void CreateWorld()
     {
         ResetPools();   //Bool for first time play to skip this?
-        SpawnTiles();
-        SpawnBuildings();
+
+        SpawnGroundTiles();
+
+        SpawnConsumers();
+        SpawnProducers();
+
+        SpawnEndpointTiles();
+        SpawnRoadTiles();
     }
 
+    //TODO: For all these functions, should I use XYZPool.Length instead of what I do now?
     //TILE FUNCTIONS
-    void SpawnTiles()
-    {
-        SpawnGroundTiles();
-        SpawnRoadTiles();
-        SpawnEndpointTiles();
-    }
     void SpawnGroundTiles()
     {
+        //TODO: Pick one of these
+        for(int i = 0; i < WorldSize.x * WorldSize.y; i++)
+        {
+            
+        }
+        for(int i = 0; i < WorldSize.x; i++)
+        {
+            for(int j = 0; j < WorldSize.y; j++)
+            {
 
-    }
-    void SpawnRoadTiles()
-    {
-
+            }
+        }
     }
     void SpawnEndpointTiles()
     {
-
+        for(int i = 0; i < NumberOfConsumers + NumberOfProducers; i++)
+        {
+            //TODO: Get the location of buildings, pick a side at random, place an endpoint so the trigger is as close to the building as possible in terms of rotations
+        }
+    }
+    void SpawnRoadTiles()
+    {
+        //TODO: Path between Consumer and Producer endpoint tiles, then place roads down along that path. Maybe do A* or something for this part, and use Unity navmesh for the vehicles
     }
 
     //BUILDING FUNCTIONS
-    void SpawnBuildings()
-    {
-        SpawnConsumers();
-        SpawnProducers();
-    }
     void SpawnConsumers()
     {
-
+        //TODO: Pick random tile, make sure there is nothing on the picked tile, place building in random rotation and position on the picked tile
     }
     void SpawnProducers()
     {
-
+        //TODO: Same as above
     }
 }
