@@ -27,7 +27,7 @@ public class PathFinder : MonoBehaviour
     List<PathNode> PathNodeFinal;
     List<Tile> AdjacentNodes;
 
-    private void Start()
+    private void Awake()
     {
         CurrentState = PathFinderState.StateIdle;
 

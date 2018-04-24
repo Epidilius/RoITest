@@ -52,7 +52,7 @@ public class Consumer : Building
         var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedVehicle();  //TODO: Better way of doing this
         PrepVehicle(vehicle);
         SetVehicleDestinations(vehicle);
-        vehicle.GetComponent<Vehicle>().StartDriving();
+        vehicle.GetComponent<Vehicle>().StartDriving(); //TODO: Change these to be Vehicle and Tile types
 
         CurrentVehicleAmount--;
     }
