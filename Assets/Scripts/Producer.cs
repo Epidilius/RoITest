@@ -8,8 +8,7 @@ public class Producer : Building
     float TimeToNextProduct;
     int FutureProductAmount;    //TODO: Use this for determining if a vehicle should be sent
 
-    // Use this for initialization
-    void Start()
+    public override void Init()
     {
         TimeToNextProduct = ProductionTime;
     }
@@ -38,5 +37,14 @@ public class Producer : Building
     public void SetProductionSpeed(int speed)
     {
         ProductionTime = speed;
+    }
+
+    public void VehicleEnRoute()
+    {
+        FutureProductAmount--;
+    }
+    public int GetFutureAmount()
+    {
+        return FutureProductAmount;
     }
 }

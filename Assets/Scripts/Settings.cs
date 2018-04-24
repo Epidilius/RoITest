@@ -9,6 +9,7 @@ public static class Settings
     static int NumberOfProducers = 2;
     static int NumberOfConsumers = 5;
     static int MaxVehiclesPerConsumer = 1;
+    static int TileSize = 5;
    
     public static void SetWorldSize(Vector2 size)
     {
@@ -42,5 +43,9 @@ public static class Settings
     public static int GetVehiclesPerConsumer()
     {
         return MaxVehiclesPerConsumer;
+    }
+    public static int GetTileSize()
+    {
+        return TileSize;
     }
 }

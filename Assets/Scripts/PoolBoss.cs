@@ -13,6 +13,8 @@ public class PoolBoss : MonoBehaviour
 
     #region VARIABLES 
     //TILES 
+    PoolBoss PoolBossInstance;
+
     [SerializeField] GameObject GroundTile;
     [SerializeField] GameObject RoadTile;
     [SerializeField] GameObject EndpointTile;
@@ -33,8 +35,9 @@ public class PoolBoss : MonoBehaviour
     ResourcePool VehiclePool;
     #endregion
 
-    void Start()
+    void Awake()
     {
+        PoolBossInstance = this;
         SetupPools();
     }
 
@@ -42,8 +45,8 @@ public class PoolBoss : MonoBehaviour
     void SetupPools()
     {
         var totalTilesInWorld = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);   //TODO: Do I still need the cast?
-        GroundTilePool = new ResourcePool(totalTilesInWorld, GroundTile);
-        RoadTilePool = new ResourcePool(totalTilesInWorld, RoadTile);
+        GroundTilePool   = new ResourcePool(totalTilesInWorld, GroundTile);
+        RoadTilePool     = new ResourcePool(totalTilesInWorld, RoadTile);
         EndpointTilePool = new ResourcePool(Settings.GetNumberOfConsumers() + Settings.GetNumberOfProducers(), EndpointTile);
 
         ConsumerPool = new ResourcePool(Settings.GetNumberOfConsumers(), ConsumerBuilding);
@@ -113,6 +116,32 @@ public class PoolBoss : MonoBehaviour
     {
         return VehiclePool.GetUsedObject(index);
     }
+    //TODO: Definitely condense these
+    public GameObject GetGroundTile(int index)
+    {
+        return GroundTilePool.GetObject(index);
+    }
+    public GameObject GetRoadTile(int index)
+    {
+        return RoadTilePool.GetUsedObject(index);
+    }
+    public GameObject GetEndpointTile(int index)
+    {
+        return EndpointTilePool.GetUsedObject(index);
+    }
+    public GameObject GetConsumerBuilding(int index)
+    {
+        return ConsumerPool.GetUsedObject(index);
+    }
+    public GameObject GetProducerBuilding(int index)
+    {
+        return ProducerPool.GetUsedObject(index);
+    }
+    public GameObject GetVehicle(int index)
+    {
+        return VehiclePool.GetUsedObject(index);
+    }
+
 
     //RETURN OBJECT TO POOL
     public void ReturnItemToPool(GameObject item)

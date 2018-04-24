@@ -8,6 +8,7 @@ public class ResourcePool : MonoBehaviour{
     Vector3 UnusedPosition;
     List<GameObject> UnusedObjectPool;
     List<GameObject> UsedObjectPool;
+    List<GameObject> AllObjectPool;
     GameObject PoolType;
 
     public ResourcePool(int size, GameObject objectPooled)
@@ -17,6 +18,7 @@ public class ResourcePool : MonoBehaviour{
         UnusedPosition = new Vector3(-1000, -1000, -1000);  //TODO: Necessary?
         UnusedObjectPool = new List<GameObject>();
         UsedObjectPool = new List<GameObject>();
+        AllObjectPool = new List<GameObject>();
 
         InitPool();
     }
@@ -30,6 +32,7 @@ public class ResourcePool : MonoBehaviour{
             item.transform.position = UnusedPosition;
             SetStatusOfComponents(ref item, false);
             UnusedObjectPool.Add(item);
+            AllObjectPool.Add(item);
         }
         Debug.Log("Finished creation of " + PoolType.name + ". Time is: " + System.DateTime.Now);
     }
@@ -56,7 +59,15 @@ public class ResourcePool : MonoBehaviour{
     }
     public GameObject GetUsedObject(int index)
     {
+        if (index > UsedObjectPool.Count || index < 0) return null; //TODO: Turn into function?
+
         return UsedObjectPool[index];
+    }
+    public GameObject GetObject(int index)
+    {
+        if (index > AllObjectPool.Count || index < 0) return null;
+
+        return AllObjectPool[index];
     }
     public void RemoveItemFromUsedPool(GameObject item)
     {
