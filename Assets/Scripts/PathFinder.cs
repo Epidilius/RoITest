@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -185,8 +186,15 @@ public class PathFinder : MonoBehaviour
         adjacentCoordinate.z += deltaZ;
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
-
-        var tileObject = PoolBoss.GetGroundTile(tileIndex);
+        GameObject tileObject = null;
+        try
+        {
+            tileObject = PoolBoss.GetGroundTile(tileIndex);
+        }
+        catch(Exception ex)
+        {
+            var temp = -1;
+        }
 
         if (tileObject == null) return null;
 

@@ -54,6 +54,12 @@ public class Consumer : Building
         SetVehicleDestinations(vehicle);
         vehicle.GetComponent<Vehicle>().StartDriving(); //TODO: Change these to be Vehicle and Tile types
 
+        if(!vehicle.GetComponent<Vehicle>().StartDriving())
+        {
+            GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
+            return;
+        }
+
         CurrentVehicleAmount--;
     }
     void PrepVehicle(GameObject vehicle)
@@ -67,9 +73,10 @@ public class Consumer : Building
         vehicle.GetComponent<Vehicle>().SetDestination(ClosestProducer.GetComponent<Producer>().GetEndpoint());
     }
 
-    public void VehicleArrived()
+    public void VehicleArrived(GameObject vehicle)
     {
         AddOneProduct();
         CurrentVehicleAmount++;
+        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
     }
 }

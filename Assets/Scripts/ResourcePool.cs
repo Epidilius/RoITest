@@ -25,7 +25,6 @@ public class ResourcePool : MonoBehaviour{
 
     void InitPool()
     {
-        Debug.Log("Starting creation of " + PoolSize + " " + PoolType.name + ". Time is: " + System.DateTime.Now);
         for (int i = 0; i < PoolSize; i++)
         {
             var item = Instantiate(PoolType);
@@ -34,7 +33,6 @@ public class ResourcePool : MonoBehaviour{
             UnusedObjectPool.Add(item);
             AllObjectPool.Add(item);
         }
-        Debug.Log("Finished creation of " + PoolType.name + ". Time is: " + System.DateTime.Now);
     }
 
     public void ResetPool()

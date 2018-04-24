@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
 {
+    //TODO: Fix freezes
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
     Vector3 TilePlacementPosition = Vector3.zero;   //TODO: Not a fan of this
@@ -142,6 +143,7 @@ public class WorldBuilder : MonoBehaviour
             } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
             
             consumer.GetComponent<Consumer>().SetParentTile(tileToUse);
+            consumer.AddComponent(typeof(NavMeshObstacle));
 
             //TODO: Change these up a bit
             Quaternion rotation = tileToUse.transform.rotation;
@@ -166,6 +168,7 @@ public class WorldBuilder : MonoBehaviour
             } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
 
             producer.GetComponent<Producer>().SetParentTile(tileToUse);
+            producer.AddComponent(typeof(NavMeshObstacle));
 
             //TODO: Change these up a bit
             Quaternion rotation = tileToUse.transform.rotation;
