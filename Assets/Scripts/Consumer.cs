@@ -51,7 +51,8 @@ public class Consumer : Building
     {
         var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedVehicle();  //TODO: Better way of doing this
         PrepVehicle(vehicle);
-        SetVehicleDestinations(vehicle);
+        SetVehicleHome(vehicle);
+        SetVehicleDestination(vehicle);
         vehicle.GetComponent<Vehicle>().StartDriving(); //TODO: Change these to be Vehicle and Tile types
 
         if(!vehicle.GetComponent<Vehicle>().StartDriving())
@@ -67,16 +68,26 @@ public class Consumer : Building
         var destination = GetEndpoint();
         vehicle.GetComponent<Vehicle>().SetTransform(destination.transform);
     }
-    void SetVehicleDestinations(GameObject vehicle)
+    void SetVehicleHome(GameObject vehicle)
     {
         vehicle.GetComponent<Vehicle>().SetHome(GetEndpoint());
+    }
+    void SetVehicleDestination(GameObject vehicle)
+    {
         vehicle.GetComponent<Vehicle>().SetDestination(ClosestProducer.GetComponent<Producer>().GetEndpoint());
     }
 
     public void VehicleArrived(GameObject vehicle)
     {
         AddOneProduct();
+        StartCoroutine(PauseBetweenJobs());
         CurrentVehicleAmount++;
-        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
+        //GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
+    }
+
+    //TODO: This is duplicated in vehicle
+    IEnumerator PauseBetweenJobs()
+    {
+        yield return new WaitForSeconds(5);
     }
 }

@@ -72,6 +72,7 @@ public class WorldBuilder : MonoBehaviour
             var endpoint = PoolBoss.GetUnusedEndpointTile();
 
             consumer.GetComponent<Consumer>().SetEndpoint(endpoint);
+            endpoint.GetComponent<Tile>().SetChildBuilding(consumer);
 
             var position = consumer.transform.position;
             position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5. Use a ternary
@@ -90,6 +91,7 @@ public class WorldBuilder : MonoBehaviour
             var endpoint = PoolBoss.GetUnusedEndpointTile();
 
             producer.GetComponent<Producer>().SetEndpoint(endpoint);
+            endpoint.GetComponent<Tile>().SetChildBuilding(producer);
 
             var position = producer.transform.position;
             position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
