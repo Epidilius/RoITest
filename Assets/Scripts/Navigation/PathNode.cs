@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PathNode : MonoBehaviour
@@ -8,7 +6,6 @@ public class PathNode : MonoBehaviour
     PathNode Parent = null;
     int HScore;
 
-    //TODO: Condense into one function?
     //SETTERS
     public void SetScore(int score)
     {
@@ -53,10 +50,5 @@ public class PathNode : MonoBehaviour
     public int GetFScore()
     {
         return GetGScore() + GetHScore();
-    }
-    //TODO: Rename this
-    public bool CompareNodes(PathNode nodeA, PathNode nodeB)
-    {
-        return nodeA.GetFScore() < nodeB.GetFScore();
     }
 }

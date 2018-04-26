@@ -1,26 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PoolBoss : MonoBehaviour
 {
 
     //TODO: Make this a singleton, or maybe static? Or do I just leave it as a MonoBehaviour? 
-    //TODO: Make funcs to fetch each type of object (consumers, tiles, vehicles, producers, roads, etc) 
-    //TODO: Have SEPERATE functions for each 
-    //TODO: Endpoint list will be of a size equal to building amount, the rest will be equal to the settings, road will be equal to the amount of total tiles 
-    //TODO: Have the UI stuff set all the variables 
+    //TODO: Can I condense further?
 
     #region VARIABLES 
     //TILES 
-    PoolBoss PoolBossInstance;
-
     [SerializeField] GameObject GroundTile;
-    [SerializeField] GameObject RoadTile;
     [SerializeField] GameObject EndpointTile;
 
     ResourcePool GroundTilePool;
-    ResourcePool RoadTilePool;
     ResourcePool EndpointTilePool;
 
     //BUILDINGS 
@@ -37,16 +28,13 @@ public class PoolBoss : MonoBehaviour
 
     void Awake()
     {
-        PoolBossInstance = this;
         SetupPools();
     }
-
-    //POOL CREATION FUNCTIONS 
+    
     void SetupPools()
     {
-        var totalTilesInWorld = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);   //TODO: Do I still need the cast?
+        var totalTilesInWorld = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);
         GroundTilePool   = new ResourcePool(totalTilesInWorld, GroundTile);
-        RoadTilePool     = new ResourcePool(totalTilesInWorld, RoadTile);
         EndpointTilePool = new ResourcePool(Settings.GetNumberOfConsumers() + Settings.GetNumberOfProducers(), EndpointTile);
 
         ConsumerPool = new ResourcePool(Settings.GetNumberOfConsumers(), ConsumerBuilding);
@@ -57,7 +45,6 @@ public class PoolBoss : MonoBehaviour
     public void ResetPools()
     {
         GroundTilePool.ResetPool();
-        RoadTilePool.ResetPool();
         EndpointTilePool.ResetPool();
 
         ConsumerPool.ResetPool();
@@ -65,95 +52,52 @@ public class PoolBoss : MonoBehaviour
 
         VehiclePool.ResetPool();
     }
+    
+    public GameObject GetUnusedObject<T>()
+    {
+        if (typeof(T) == typeof(Vehicle))                   return VehiclePool.GetUnusedObject();
 
-    //GET OBJECT FROM POOL
-    public GameObject GetUnusedGroundTile()
-    {
-        return GroundTilePool.GetUnusedObject();
-    }
-    public GameObject GetUnusedRoadTile()
-    {
-        return RoadTilePool.GetUnusedObject();
-    }
-    public GameObject GetUnusedEndpointTile()
-    {
-        return EndpointTilePool.GetUnusedObject();
-    }
-    public GameObject GetUnusedConsumerBuilding()
-    {
-        return ConsumerPool.GetUnusedObject();
-    }
-    public GameObject GetUnusedProducerBuilding()
-    {
-        return ProducerPool.GetUnusedObject();
-    }
-    public GameObject GetUnusedVehicle()
-    {
-        return VehiclePool.GetUnusedObject();
-    }
-    //TODO: Can I make a single funciton like I did with the remove?
-    public GameObject GetUsedGroundTile(int index)
-    {
-        return GroundTilePool.GetUsedObject(index);
-    }
-    public GameObject GetUsedRoadTile(int index)
-    {
-        return RoadTilePool.GetUsedObject(index);
-    }
-    public GameObject GetUsedEndpointTile(int index)
-    {
-        return EndpointTilePool.GetUsedObject(index);
-    }
-    public GameObject GetUsedConsumerBuilding(int index)
-    {
-        return ConsumerPool.GetUsedObject(index);
-    }
-    public GameObject GetUsedProducerBuilding(int index)
-    {
-        return ProducerPool.GetUsedObject(index);
-    }
-    public GameObject GetUsedVehicle(int index)
-    {
-        return VehiclePool.GetUsedObject(index);
-    }
-    //TODO: Definitely condense these
-    public GameObject GetGroundTile(int index)
-    {
-        return GroundTilePool.GetObject(index);
-    }
-    public GameObject GetRoadTile(int index)
-    {
-        return RoadTilePool.GetUsedObject(index);
-    }
-    public GameObject GetEndpointTile(int index)
-    {
-        return EndpointTilePool.GetUsedObject(index);
-    }
-    public GameObject GetConsumerBuilding(int index)
-    {
-        return ConsumerPool.GetUsedObject(index);
-    }
-    public GameObject GetProducerBuilding(int index)
-    {
-        return ProducerPool.GetUsedObject(index);
-    }
-    public GameObject GetVehicle(int index)
-    {
-        return VehiclePool.GetUsedObject(index);
-    }
+        else if (typeof(T) == typeof(Tile.GroundTile))      return GroundTilePool.GetUnusedObject();
+        else if (typeof(T) == typeof(Tile.EndpointTile))    return EndpointTilePool.GetUnusedObject();
 
+        else if (typeof(T) == typeof(Consumer))             return ConsumerPool.GetUnusedObject();
+        else if (typeof(T) == typeof(Producer))             return ProducerPool.GetUnusedObject();
 
-    //RETURN OBJECT TO POOL
+        return null;
+    }
+    public GameObject GetUsedObject<T>(int index)
+    {
+        if (typeof(T) == typeof(Vehicle))                   return VehiclePool.GetUsedObject(index);
+
+        else if (typeof(T) == typeof(Tile.GroundTile))      return GroundTilePool.GetUsedObject(index);
+        else if (typeof(T) == typeof(Tile.EndpointTile))    return EndpointTilePool.GetUsedObject(index);
+
+        else if (typeof(T) == typeof(Consumer))             return ConsumerPool.GetUsedObject(index);
+        else if (typeof(T) == typeof(Producer))             return ProducerPool.GetUsedObject(index);
+
+        return null;
+    }
+    public GameObject GetObject<T>(int index)
+    {
+        if (typeof(T) == typeof(Vehicle))                   return VehiclePool.GetObject(index);
+
+        else if (typeof(T) == typeof(Tile.GroundTile))      return GroundTilePool.GetObject(index);
+        else if (typeof(T) == typeof(Tile.EndpointTile))    return EndpointTilePool.GetObject(index);
+
+        else if (typeof(T) == typeof(Consumer))             return ConsumerPool.GetObject(index);
+        else if (typeof(T) == typeof(Producer))             return ProducerPool.GetObject(index);
+
+        return null;
+    }
+    
     public void ReturnItemToPool(GameObject item)
     {
         if (item.GetType() == Vehicle.GetType())                VehiclePool.RemoveItemFromUsedPool(item);
 
-        else if (item.GetType() == GroundTile.GetType())        GroundTilePool.RemoveItemFromUsedPool(item);
-        else if (item.GetType() == RoadTile.GetType())          RoadTilePool.RemoveItemFromUsedPool(item);        
+        else if (item.GetType() == GroundTile.GetType())        GroundTilePool.RemoveItemFromUsedPool(item);   
         else if (item.GetType() == EndpointTile.GetType())      EndpointTilePool.RemoveItemFromUsedPool(item);
         
         else if (item.GetType() == ConsumerBuilding.GetType())  ConsumerPool.RemoveItemFromUsedPool(item);        
         else if (item.GetType() == ProducerBuilding.GetType())  ProducerPool.RemoveItemFromUsedPool(item);        
     }
-
 }

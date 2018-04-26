@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Consumer : Building
 {
+    //TODO: Fix the new problem where vehicles are only being spawned once. Test this by reducing the time it takes to make a product
     int CurrentVehicleAmount;
     Producer ClosestProducer;
-    GameObject Vehicle;
-    
+
     public override void Init()
     {
         CurrentVehicleAmount = Settings.GetVehiclesPerConsumer();
@@ -33,8 +30,7 @@ public class Consumer : Building
 
         return closestProducer;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if(IsVehicleReady())
@@ -43,26 +39,18 @@ public class Consumer : Building
         }
     }
 
-    bool IsVehicleReady()
+    bool IsVehicleReady()   //TODO: Rename?
     {
-        return CurrentVehicleAmount > 0;
+        return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() < 1);
     }
 
     void SendVehicle()
     {
-        if(ClosestProducer.GetFutureAmount() < 1)
-        {
-            return;
-        }
-
-        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedVehicle();  //TODO: Better way of doing this
-        PrepVehicle(vehicle);
-        SetVehicleHome(vehicle);
-        SetVehicleDestination(vehicle); //TODO: Change these to be Vehicle and Tile types
+        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Better way of doing this
+        PrepVehicle(vehicle.GetComponent<Vehicle>());
 
         if (!vehicle.GetComponent<Vehicle>().StartDriving())
         {
-            //TODO: Should I do this? I don't think so 
             GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
             return;
         }
@@ -70,23 +58,26 @@ public class Consumer : Building
         ClosestProducer.VehicleEnRoute();
         CurrentVehicleAmount--;
     }
-    void PrepVehicle(GameObject vehicle)
+    void PrepVehicle(Vehicle vehicle)
     {
         var destination = GetEndpoint();
-        vehicle.GetComponent<Vehicle>().SetTransform(destination.transform);
+        vehicle.SetTransform(destination.transform);
+
+        SetVehicleHome(vehicle);
+        SetVehicleDestination(vehicle);
     }
-    void SetVehicleHome(GameObject vehicle)
+    void SetVehicleHome(Vehicle vehicle)
     {
-        vehicle.GetComponent<Vehicle>().SetConsumer(GetEndpoint());
+        vehicle.SetConsumer(GetEndpoint());
     }
-    void SetVehicleDestination(GameObject vehicle)
+    void SetVehicleDestination(Vehicle vehicle)
     {
-        vehicle.GetComponent<Vehicle>().SetProducer(ClosestProducer.GetComponent<Producer>().GetEndpoint());
+        vehicle.SetProducer(ClosestProducer.GetComponent<Producer>().GetEndpoint());
     }
 
     public override void VehicleArrived(GameObject vehicle)
     {
-        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
+        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);    //TODO: I dont like the GetComponents in this class
         AddOneProduct();
         StartCoroutine(PauseToUnloadVehicle());
         CurrentVehicleAmount++;

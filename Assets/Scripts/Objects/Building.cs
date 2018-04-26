@@ -11,7 +11,7 @@ public class Building : MonoBehaviour
 
     public virtual void Init()
     {
-        //TODO: Stuff like find nearest Producer. Maybe move to just be in the Consumer
+        
     }
 
     protected void AddOneProduct()
@@ -55,7 +55,7 @@ public class Building : MonoBehaviour
 
     }
 
-    protected IEnumerator PauseToUnloadVehicle()
+    protected IEnumerator PauseToUnloadVehicle()    //TODO: Do I need this?
     {
         yield return new WaitForSeconds(5);
     }

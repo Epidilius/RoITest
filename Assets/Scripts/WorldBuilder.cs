@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
@@ -8,10 +6,8 @@ public class WorldBuilder : MonoBehaviour
     //TODO: Fix freezes
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
-    Vector3 TilePlacementPosition = Vector3.zero;   //TODO: Not a fan of this
     #endregion
 
-    // Use this for initialization
     void Start()
     {
         CreateWorld();
@@ -24,9 +20,8 @@ public class WorldBuilder : MonoBehaviour
 
         SpawnGroundTiles();
 
-        SpawnConsumers();
         SpawnProducers();
-        InitBuildings();
+        SpawnConsumers();
 
         SpawnEndpointTiles();
         SpawnRoadTiles();
@@ -48,19 +43,23 @@ public class WorldBuilder : MonoBehaviour
         builder.m_Size = center * 2;
         builder.m_Size.y = 20;
     }
-    //TODO: For all these functions, should I use XYZPool.Length instead of what I do now?
+
     //TILE FUNCTIONS
     void SpawnGroundTiles()
     {
-        for(int i = 0; i < Settings.GetWorldSize().x; i++)
+        Vector3 tilePlacementPosition = Vector3.zero;
+
+        for (int i = 0; i < Settings.GetWorldSize().x; i++)
         {
-            TilePlacementPosition.x = Settings.GetTileSize() * i;
             for(int j = 0; j < Settings.GetWorldSize().y; j++)
             {
-                TilePlacementPosition.z = Settings.GetTileSize() * j;
-                var tile = PoolBoss.GetUnusedGroundTile();
+                tilePlacementPosition.x = Settings.GetTileSize() * i;
+                tilePlacementPosition.z = Settings.GetTileSize() * j;
+
+                var tile = PoolBoss.GetUnusedObject<Tile.GroundTile>();
+
                 tile.name += " #" + ((i * Settings.GetWorldSize().x) + j);
-                SetPositionAndRotation(tile, TilePlacementPosition, Quaternion.identity);
+                SetPositionAndRotation(tile, tilePlacementPosition, Quaternion.identity);
             }
         }
     }
@@ -68,64 +67,41 @@ public class WorldBuilder : MonoBehaviour
     {
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
-            var consumer = PoolBoss.GetUsedConsumerBuilding(i);
-            var endpoint = PoolBoss.GetUnusedEndpointTile();
-
-            consumer.GetComponent<Consumer>().SetEndpoint(endpoint);
-            endpoint.GetComponent<Tile>().SetChildBuilding(consumer);
-
-            var position = consumer.transform.position;
-            position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5. Use a ternary
-            position.y = 0.001f;
-            var rotation = consumer.transform.rotation; //TODO: Better rotation
-            rotation.y = 1;   //TODO: Based on the XY the rotation should be
-
-            endpoint.AddComponent(typeof(NavMeshSourceTag));
-
-            SetPositionAndRotation(endpoint, position, rotation);
+            CreateEndpointAtBuilding(PoolBoss.GetUsedObject<Consumer>(i));
         }
-        //TODO: Unduplicate this code
         for(int i = 0; i < Settings.GetNumberOfProducers(); i++)
         {
-            var producer = PoolBoss.GetUsedProducerBuilding(i);
-            var endpoint = PoolBoss.GetUnusedEndpointTile();
-
-            producer.GetComponent<Producer>().SetEndpoint(endpoint);
-            endpoint.GetComponent<Tile>().SetChildBuilding(producer);
-
-            var position = producer.transform.position;
-            position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
-            position.y = 0.1f;
-            var rotation = producer.transform.rotation; //TODO: Better rotation
-            rotation.y = 1;   //TODO: Based on the XY the rotation should be
-
-            endpoint.AddComponent(typeof(NavMeshSourceTag));
-
-            SetPositionAndRotation(endpoint, position, rotation);
+            CreateEndpointAtBuilding(PoolBoss.GetUsedObject<Producer>(i));
         }
+    }
+    void CreateEndpointAtBuilding(GameObject building)
+    {
+        var endpoint = PoolBoss.GetUnusedObject<Tile.EndpointTile>();
+
+        building.GetComponent<Building>().SetEndpoint(endpoint);
+        endpoint.GetComponent<Tile>().SetChildBuilding(building.GetComponent<Building>());
+
+        var position = building.transform.position;
+        position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
+        position.y = 0.1f;
+        var rotation = building.transform.rotation; //TODO: Better rotation
+        rotation.y = 1;   //TODO: Based on the XY the rotation should be
+
+        endpoint.AddComponent(typeof(NavMeshSourceTag));
+
+        SetPositionAndRotation(endpoint, position, rotation);
     }
     void SpawnRoadTiles()
     {
-        //TODO: Path between Consumer and Producer endpoint tiles, then place roads down along that path. Maybe do A* or something for this part, and use Unity navmesh for the vehicles
-
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i ++)
         {
-            //TODO: Ternaries?
-            var consumer = PoolBoss.GetUsedConsumerBuilding(i);
-            if(consumer == null)
-            {
-                continue;
-            }
+            var consumer = PoolBoss.GetUsedObject<Consumer>(i);
 
             for(int j = 0; j < Settings.GetNumberOfProducers(); j++)
             {
-                var producer = PoolBoss.GetUsedProducerBuilding(j);
-                if(producer == null)
-                {
-                    continue;
-                }
-
+                var producer = PoolBoss.GetUsedObject<Producer>(j);
                 var path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
+                //TODO Use the path var to spawn roads
             }
         }
     }
@@ -133,65 +109,37 @@ public class WorldBuilder : MonoBehaviour
     //BUILDING FUNCTIONS
     void SpawnConsumers()
     {
-        int amountOfTiles = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);
-
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
-            var consumer = PoolBoss.GetUnusedConsumerBuilding();
-            GameObject tileToUse = null;
-            do
-            {
-                tileToUse = PoolBoss.GetUsedGroundTile(Random.Range(0, amountOfTiles));
-            } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
-            
-            consumer.GetComponent<Consumer>().SetParentTile(tileToUse);
-            consumer.AddComponent(typeof(NavMeshObstacle));
-
-            //TODO: Change these up a bit
-            Quaternion rotation = tileToUse.transform.rotation;
-            Vector3 position = tileToUse.transform.position;
-            position.y = 0.5f;
-
-            SetPositionAndRotation(consumer, position, rotation);
+            CreateBuilding<Consumer>();
         }
     }
     void SpawnProducers()
     {
-        //TODO: Condese this duplicated code
-        int amountOfTiles = (int)(Settings.GetWorldSize().x * Settings.GetWorldSize().y);
-
         for (int i = 0; i < Settings.GetNumberOfProducers(); i++)
         {
-            var producer = PoolBoss.GetUnusedProducerBuilding();
-            GameObject tileToUse = null;
-            do
-            {
-                tileToUse = PoolBoss.GetUsedGroundTile(Random.Range(0, amountOfTiles));
-            } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
-
-            producer.GetComponent<Producer>().SetParentTile(tileToUse);
-            producer.AddComponent(typeof(NavMeshObstacle));
-
-            //TODO: Change these up a bit
-            Quaternion rotation = tileToUse.transform.rotation;
-            Vector3 position = tileToUse.transform.position;
-            position.y = 0.5f;
-
-            SetPositionAndRotation(producer, position, rotation);
+            CreateBuilding<Producer>();
         }
     }
-    void InitBuildings()
+    void CreateBuilding<T>()
     {
-        //TODO: Undupe this code.
-        //TODO: Maybe, instead of this function, I should call SpawnProducers before SpawnConsumers, and then call the Inits in the spawners
-        for (int i = 0; i < Settings.GetNumberOfConsumers(); i++)
+        var building = PoolBoss.GetUnusedObject<T>();
+        GameObject tileToUse = null;
+        do
         {
-            PoolBoss.GetUsedConsumerBuilding(i).GetComponent<Consumer>().Init();
-        }
-        for (int i = 0; i < Settings.GetNumberOfProducers(); i++)
-        {
-            PoolBoss.GetUsedProducerBuilding(i).GetComponent<Producer>().Init();
-        }
+            tileToUse = PoolBoss.GetUsedObject<Tile.GroundTile>(Random.Range(0, Settings.GetTotalTileAmount() - 1));
+        } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
+
+        building.GetComponent<Building>().SetParentTile(tileToUse);
+        building.GetComponent<Building>().Init();
+        building.AddComponent(typeof(NavMeshObstacle));
+
+        //TODO: Change these up a bit
+        Quaternion rotation = tileToUse.transform.rotation;
+        Vector3 position = tileToUse.transform.position;
+        position.y = 0.5f;
+
+        SetPositionAndRotation(building, position, rotation);
     }
 
     void SetPositionAndRotation(GameObject gameObject, Vector3 position, Quaternion rotation)

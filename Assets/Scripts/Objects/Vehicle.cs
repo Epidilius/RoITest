@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class Vehicle : MonoBehaviour
@@ -15,11 +13,9 @@ public class Vehicle : MonoBehaviour
     GameObject Consumer;
     GameObject Producer;
     NavMeshAgent Agent;
-    Time ArrivalTime;
     VehicleState CurrentState;
     
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
         Agent = gameObject.GetComponent<NavMeshAgent>();
         CurrentState = VehicleState.Inactive;
@@ -31,11 +27,11 @@ public class Vehicle : MonoBehaviour
     }
     public void SetProducer(GameObject producer)
     {
-        Producer = producer;  //TODO: Do this? Or just set the AI Agent's target?
+        Producer = producer;
     }
     public void SetTransform(Transform newTransform)
     {
-        gameObject.GetComponent<NavMeshAgent>().Warp(newTransform.position);    //TODO: Do I need to do gameObject.transform?
+        gameObject.GetComponent<NavMeshAgent>().Warp(newTransform.position);
     }
 
     public bool StartDriving()
@@ -49,13 +45,12 @@ public class Vehicle : MonoBehaviour
         }
         else
         {
-            destinationSet =  Agent.SetDestination(Producer.transform.position);
+            destinationSet = Agent.SetDestination(Producer.transform.position);
         }
 
         CurrentState = VehicleState.InTransit;
 
         return destinationSet;
-        //TODO: Wrap in a try/catch? No, just find a way to ONLY call this after pathing is done
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,24 +61,19 @@ public class Vehicle : MonoBehaviour
             //TODO: Undupe this code
             if (other.gameObject == Consumer && CurrentState != VehicleState.AtConsumer && Vector3.Distance(Agent.destination, Consumer.transform.position) < 0.2)
             {
-                Debug.Log("Vehicle reached home");
                 CurrentState = VehicleState.AtConsumer;
-                Agent.isStopped = true;
-
-                var tile = other.gameObject.transform.parent.GetComponent<Tile>();
-                var consumer = tile.GetChildBuilding().GetComponent<Building>();
-                consumer.VehicleArrived(gameObject);
+                VehicleArrived(other.gameObject);
             }
             else if(other.gameObject == Producer && CurrentState != VehicleState.AtProducer && Vector3.Distance(Agent.destination, Producer.transform.position) < 0.2)
             {
-                Debug.Log("Vehicle reached destination");
                 CurrentState = VehicleState.AtProducer;
-                Agent.isStopped = true;
-
-                var tile = other.gameObject.transform.parent.GetComponent<Tile>();
-                var producer = tile.GetChildBuilding().GetComponent<Building>();    //Will using Building instead of Consumer/Producer work?
-                producer.VehicleArrived(gameObject);
+                VehicleArrived(other.gameObject);
             }
         }
+    }
+    void VehicleArrived(GameObject buildingObject)
+    {
+        Agent.isStopped = true;
+        buildingObject.transform.parent.GetComponent<Tile>().GetChildBuilding().VehicleArrived(gameObject);
     }
 }

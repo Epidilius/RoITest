@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourcePool : MonoBehaviour{
@@ -28,8 +27,7 @@ public class ResourcePool : MonoBehaviour{
         for (int i = 0; i < PoolSize; i++)
         {
             var item = Instantiate(PoolType);
-            item.transform.position = UnusedPosition;
-            SetStatusOfComponents(ref item, false);
+            SetStatusOfComponents(item, false);
             UnusedObjectPool.Add(item);
             AllObjectPool.Add(item);
         }
@@ -38,7 +36,7 @@ public class ResourcePool : MonoBehaviour{
     public void ResetPool()
     {
         List<GameObject> clone = UsedObjectPool;
-
+        
         foreach (var item in clone)
         {
             RemoveItemFromUsedPool(item);
@@ -50,7 +48,7 @@ public class ResourcePool : MonoBehaviour{
         if (UnusedObjectPool.Count < 1) return null;
 
         var item = UnusedObjectPool[0];
-        SetStatusOfComponents(ref item, true);
+        SetStatusOfComponents(item, true);
 
         UnusedObjectPool.RemoveAt(0);
         UsedObjectPool.Add(item);
@@ -59,28 +57,26 @@ public class ResourcePool : MonoBehaviour{
     }
     public GameObject GetUsedObject(int index)
     {
-        if (index > UsedObjectPool.Count || index < 0) return null; //TODO: Turn into function?
-
-        return UsedObjectPool[index];
+        return IsIndexValid(index, UsedObjectPool) ? UsedObjectPool[index] : null;
     }
     public GameObject GetObject(int index)
     {
-        if (index > AllObjectPool.Count || index < 0) return null;
-
-        return AllObjectPool[index];
+        return IsIndexValid(index, AllObjectPool) ? AllObjectPool[index] : null;
     }
     public void RemoveItemFromUsedPool(GameObject item)
     {
-        item.transform.position = UnusedPosition;   //TODO: Better spot for this?
-
         UsedObjectPool.Remove(item);
-
-        SetStatusOfComponents(ref item, false);
+        SetStatusOfComponents(item, false);
         UnusedObjectPool.Add(item);
     }
 
-    void SetStatusOfComponents(ref GameObject item, bool enabled)   //TODO: Do I need the ref?
+    bool IsIndexValid(int index, List<GameObject> pool) //TODO: Remove the pool argument?
+    {
+        return (index < pool.Count || index > 0);
+    }
+    void SetStatusOfComponents(GameObject item, bool enabled)   //TODO: Do I need the ref?
     {
         item.gameObject.SetActive(enabled);
+        if (enabled == false) item.transform.position = UnusedPosition;
     }
 }

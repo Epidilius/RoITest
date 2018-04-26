@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PathFinder : MonoBehaviour
 {
-    [SerializeField] PoolBoss PoolBoss;
-
-    //DEBUG
+    //MATERIALS
     public Material OpenPathMat;
     public Material ClosedPathMat;
     public Material FinalPathMat;
     public Material RoadMaterial;
 
+    //STATE
     enum PathFinderState
     {
         StateIdle = 0,
@@ -23,12 +20,13 @@ public class PathFinder : MonoBehaviour
     };
     PathFinderState CurrentState;
     
+    //NODE COLLECTIONS
     List<PathNode> PathNodeOpen;
     List<PathNode> PathNodeClosed;
     List<PathNode> PathNodeFinal;
-    List<Tile> AdjacentNodes;
+    List<Tile> AdjacentNodes;   //TODO: Can I get rid of this?
 
-    private void Awake()
+    private void Start()
     {
         CurrentState = PathFinderState.StateIdle;
 
@@ -44,21 +42,19 @@ public class PathFinder : MonoBehaviour
         ClearPathNodes();
     }
 
-    //TODO: Refactor this function
     public List<PathNode> FindPath(GameObject startingobject, GameObject destinationObject)
     {
+        if(startingobject == null || destinationObject == null)
+        {
+            return null;
+        }
+
         var startTile = startingobject.GetComponent<Tile>();
         var destinationTile = destinationObject.GetComponent<Tile>();
 
-        if(startTile == null || destinationTile == null)
-        {
-            //TODO: start == dest?
-             return null;
-        }
-
         return FindPath(startTile, destinationTile);
     }
-    public List<PathNode> FindPath(Tile startingTile, Tile destinationTile)
+    public List<PathNode> FindPath(Tile startingTile, Tile destinationTile)//TODO: Refactor?
     {
         Reset();
 
@@ -82,7 +78,6 @@ public class PathFinder : MonoBehaviour
         {
             if(PathNodeOpen.Count == 0)
             {
-                //TODO: Debug on errors?
                 CurrentState = PathFinderState.StateError;
                 return null;
             }
@@ -97,11 +92,11 @@ public class PathFinder : MonoBehaviour
                 return PathNodeFinal;
             }
 
-            var adjacents = GetAdjacentTiles(currentNode.GetTile());
+            FindAjacentTiles(currentNode.GetTile());
 
-            for(int i = 0; i < adjacents.Count; i++)
+            for(int i = 0; i < AdjacentNodes.Count; i++)
             {
-                var tile = adjacents[i];
+                var tile = AdjacentNodes[i];
                 if (tile == null)
                 {
                     continue;
@@ -161,11 +156,10 @@ public class PathFinder : MonoBehaviour
     }
     int GetTileIndex(Vector3 coordinates)
     {
-        return (int)((coordinates.x * Settings.GetWorldSize().y) + coordinates.z) / Settings.GetTileSize();   //TODO: Test this
+        return (int)((coordinates.x * Settings.GetWorldSize().y) + coordinates.z) / Settings.GetTileSize();
     }
-
-    //TODO: Should this be something Tile handles?
-    List<Tile> GetAdjacentTiles(Tile currentTile)
+    
+    void FindAjacentTiles(Tile currentTile) //TODO: Return type?
     {
         AdjacentNodes.Clear();
 
@@ -173,8 +167,6 @@ public class PathFinder : MonoBehaviour
         AdjacentNodes.Add(GetAdjacentTile(currentTile, 0, -1));
         AdjacentNodes.Add(GetAdjacentTile(currentTile, 1, 0));
         AdjacentNodes.Add(GetAdjacentTile(currentTile, -1, 0));
-
-        return AdjacentNodes;   //TODO: Actually return this?
     }
     Tile GetAdjacentTile(Tile currentTile, int deltaX, int deltaZ)
     {
@@ -186,33 +178,21 @@ public class PathFinder : MonoBehaviour
         adjacentCoordinate.z += deltaZ;
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
-        GameObject tileObject = PoolBoss.GetGroundTile(tileIndex);
-    
-        if (tileObject == null) return null;    //TODO: Simplify these two lines of code
-
-        return tileObject.GetComponent<Tile>();
+        GameObject tileObject = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetObject<Tile.GroundTile>(tileIndex);
+        
+        return tileObject != null ? tileObject.GetComponent<Tile>() : null; //TODO: Simplify to return tileObject ?? tileObject.GetComponent<Tile>();?
     }
-
-    //TODO: Faster way than looping through ther lists thousands of times?
+    
     bool DoesTileExistInClosedList(Tile tile)
     {
-        var tileIndex = GetTileIndex(tile);
-        
-        for(int i = 0; i < PathNodeClosed.Count; i++)
-        {
-            if(GetTileIndex(PathNodeClosed[i].GetTile()) == tileIndex)
-            {
-                return true;
-            }
-        }
-        return false;
+        var matches = PathNodeClosed.Where(x => x.GetTile() == tile);   //TODO: TEST
+        return matches.Count() > 1;
     }
     bool DoesTileExistInOpenList(Tile tile) 
     {
-        return GetOpenPathNodeForTile(tile) != null;
+        return GetOpenPathNodeForTile(tile) != null;    //TODO: Redo this to look like the Closed function?
     }
 
-    //Returns a PathNode that matches the Tile from the Open List
     PathNode GetOpenPathNodeForTile(Tile tile)
     {
         int tileIndex = GetTileIndex(tile);
@@ -224,17 +204,14 @@ public class PathFinder : MonoBehaviour
                 return PathNodeOpen[i];
             }
         }
-
         return null;
     }
-
-    //Sort the open list, the path node with the lowest F score will be first
+    
     void SortOpenList()
     {
         PathNodeOpen = PathNodeOpen.OrderBy(x => x.GetFScore()).ToList();
     }
 
-    //Add a path node to the open list and sorts it based on the F score
     void AddPathNodeToOpenList(PathNode node)
     {
         //node.GetTile().SetMaterial(OpenPathMat);
@@ -248,18 +225,17 @@ public class PathFinder : MonoBehaviour
         PathNodeOpen.Remove(node);
     }
 
-    //Build the final path, called once a path is found
     void BuildFinalNodePath(PathNode node)
     {
         do
         {
-            if(node.GetParent() != null)    //TODO: Do I need this?
+            if(node.GetParent() != null)
             {
                 PathNodeFinal.Insert(0, node);
             }
 
             //node.GetTile().SetMaterial(FinalPathMat);
-            //TODO: Place in new function
+            //TODO: Move some of this to a new function? 
             if (node.gameObject.GetComponent<NavMeshSourceTag>() == null)
             {
                 node.gameObject.AddComponent(typeof(NavMeshSourceTag));
@@ -269,35 +245,20 @@ public class PathFinder : MonoBehaviour
             node = node.GetParent();
         } while (node != null);
     }
-
-    //Clears the Open, closed and final path Lists, cleans up all memory associated with them
+    
     void ClearPathNodes()
     {
         PathNodeOpen.Clear();
         PathNodeClosed.Clear();
         PathNodeFinal.Clear();
     }
-    /*
-     for (int i = 0; i < PathNodeFinal.Count; i++)
-        {
-            var node = PathNodeFinal[i];
 
-            //TODO: Move to function
-            if (node.gameObject.GetComponent<NavMeshSourceTag>() != null)
-            {
-                Destroy(node.gameObject.GetComponent<NavMeshSourceTag>());
-            }
-        }
-     */
-
-    //Calculate the manhattan distance (h score)
     int GetManhattanDistanceCost(Tile startTile, Tile destinationTile)
     {
         Vector3 start = startTile.transform.position;
         Vector3 end   = destinationTile.transform.position;
 
-        var distance = Mathf.Abs((int)(end.x - start.x)) + Mathf.Abs((int)(end.z - start.z));   //TODO: Maybe have one casting call for this instead of two?
-        return distance;
-
+        var distance = Mathf.Abs(end.x - start.x) + Mathf.Abs(end.z - start.z);
+        return (int)distance;
     }
 }

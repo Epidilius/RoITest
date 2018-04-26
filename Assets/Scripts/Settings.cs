@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class Settings
 {
-    //TODO: Use PlayerPrefs instead? Go singleton?
     static Vector2 WorldSize = new Vector2(50, 50);
     static int NumberOfProducers = 2;
     static int NumberOfConsumers = 5;
     static int MaxVehiclesPerConsumer = 1;
+    static int MinutesToMakeProduct = 1;
     static int TileSize = 5;
    
     public static void SetWorldSize(Vector2 size)
@@ -27,10 +25,18 @@ public static class Settings
     {
         MaxVehiclesPerConsumer = amount;
     }
+    public static void SetMinutesToMakeProduct(int time)
+    {
+        MinutesToMakeProduct = time;
+    }
 
     public static Vector2 GetWorldSize()
     {
         return WorldSize;
+    }
+    public static int GetTotalTileAmount()
+    {
+        return (int)(WorldSize.x * WorldSize.y);
     }
     public static int GetNumberOfProducers()
     {
@@ -43,6 +49,10 @@ public static class Settings
     public static int GetVehiclesPerConsumer()
     {
         return MaxVehiclesPerConsumer;
+    }
+    public static int GetMinutesToMakeProduct()
+    {
+        return MinutesToMakeProduct;
     }
     public static int GetTileSize()
     {
