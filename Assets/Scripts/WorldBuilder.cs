@@ -11,13 +11,20 @@ public class WorldBuilder : MonoBehaviour
     void Start()
     {
         CreateWorld();
+        SetupNavBuilder();
     }
-    
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            PoolBoss.ResetPools();  //TODO: In CreateWorld?
+            CreateWorld();
+        }
+    }
+
     public void CreateWorld()
     {
-        PoolBoss.ResetPools();   //Bool for first time play to skip this?
-        SetupNavBuilder();
-
         SpawnGroundTiles();
 
         SpawnProducers();
@@ -58,7 +65,8 @@ public class WorldBuilder : MonoBehaviour
 
                 var tile = PoolBoss.GetUnusedObject<Tile.GroundTile>();
 
-                tile.name += " #" + ((i * Settings.GetWorldSize().x) + j);
+                tile.GetComponent<Tile>().Init();
+                tile.name = "Ground Tile #" + ((i * Settings.GetWorldSize().x) + j);
                 SetPositionAndRotation(tile, tilePlacementPosition, Quaternion.identity);
             }
         }
@@ -111,17 +119,17 @@ public class WorldBuilder : MonoBehaviour
     {
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
-            CreateBuilding<Consumer>();
+            CreateBuilding<Consumer>("Consumer #" + i);
         }
     }
     void SpawnProducers()
     {
         for (int i = 0; i < Settings.GetNumberOfProducers(); i++)
         {
-            CreateBuilding<Producer>();
+            CreateBuilding<Producer>("Producer #" + i);
         }
     }
-    void CreateBuilding<T>()
+    void CreateBuilding<T>(string name = "")
     {
         var building = PoolBoss.GetUnusedObject<T>();
         GameObject tileToUse = null;
@@ -129,17 +137,17 @@ public class WorldBuilder : MonoBehaviour
         {
             tileToUse = PoolBoss.GetUsedObject<Tile.GroundTile>(Random.Range(0, Settings.GetTotalTileAmount() - 1));
         } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
-
-        building.GetComponent<Building>().SetParentTile(tileToUse);
-        building.GetComponent<Building>().Init();
-        building.AddComponent(typeof(NavMeshObstacle));
-
+        
         //TODO: Change these up a bit
         Quaternion rotation = tileToUse.transform.rotation;
         Vector3 position = tileToUse.transform.position;
         position.y = 0.5f;
-
+        
+        building.name = name;
         SetPositionAndRotation(building, position, rotation);
+
+        building.GetComponent<Building>().SetParentTile(tileToUse);
+        building.GetComponent<Building>().Init();
     }
 
     void SetPositionAndRotation(GameObject gameObject, Vector3 position, Quaternion rotation)

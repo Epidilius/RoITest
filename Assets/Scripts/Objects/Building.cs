@@ -54,9 +54,4 @@ public class Building : MonoBehaviour
     {
 
     }
-
-    protected IEnumerator PauseToUnloadVehicle()    //TODO: Do I need this?
-    {
-        yield return new WaitForSeconds(5);
-    }
 }

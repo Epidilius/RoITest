@@ -14,7 +14,7 @@ public class Producer : Building
     
     void Update()
     {
-        TimeToNextProduct -= Time.deltaTime / 60f;
+        TimeToNextProduct -= Time.deltaTime / 6f;
         if(TimeToNextProduct <= 0f)
         {
             CreateProdcut();
@@ -38,7 +38,6 @@ public class Producer : Building
     public override void VehicleArrived(GameObject vehicle)
     {
         RemoveOneProduct();
-        StartCoroutine(PauseToUnloadVehicle());
         vehicle.GetComponent<Vehicle>().StartDriving();
     }
     public void VehicleEnRoute()

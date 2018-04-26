@@ -26,7 +26,7 @@ public class PathFinder : MonoBehaviour
     List<PathNode> PathNodeFinal;
     List<Tile> AdjacentNodes;   //TODO: Can I get rid of this?
 
-    private void Start()
+    private void Awake()
     {
         CurrentState = PathFinderState.StateIdle;
 
@@ -178,15 +178,36 @@ public class PathFinder : MonoBehaviour
         adjacentCoordinate.z += deltaZ;
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
-        GameObject tileObject = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetObject<Tile.GroundTile>(tileIndex);
+        var tileObject = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUsedObject<Tile.GroundTile>(tileIndex);
+        if(tileObject == null)
+        {
+            return null;
+        }
         
-        return tileObject != null ? tileObject.GetComponent<Tile>() : null; //TODO: Simplify to return tileObject ?? tileObject.GetComponent<Tile>();?
+        var tile = tileObject.GetComponent<Tile>();
+        if (tile == null)
+        {
+            return null;
+        }
+        
+        return tile;
     }
     
     bool DoesTileExistInClosedList(Tile tile)
     {
-        var matches = PathNodeClosed.Where(x => x.GetTile() == tile);   //TODO: TEST
-        return matches.Count() > 1;
+        //var matches = PathNodeClosed.Where(x => x.GetTile() == tile);
+        //return matches.Count() > 0;
+        int tileIndex = GetTileIndex(tile);
+
+        for (int i = 0; i < PathNodeClosed.Count; i++)
+        {
+            if (GetTileIndex(PathNodeClosed[i].GetTile()) == tileIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     bool DoesTileExistInOpenList(Tile tile) 
     {
@@ -204,6 +225,7 @@ public class PathFinder : MonoBehaviour
                 return PathNodeOpen[i];
             }
         }
+
         return null;
     }
     
@@ -248,9 +270,20 @@ public class PathFinder : MonoBehaviour
     
     void ClearPathNodes()
     {
+        ClearParentsFromNode(PathNodeOpen);
+        ClearParentsFromNode(PathNodeClosed);
+        ClearParentsFromNode(PathNodeFinal);
+
         PathNodeOpen.Clear();
         PathNodeClosed.Clear();
         PathNodeFinal.Clear();
+    }
+    void ClearParentsFromNode(List<PathNode> nodes)
+    {
+        for(int i = 0; i < nodes.Count; i++)
+        {
+            nodes[i].SetParent(null);
+        }
     }
 
     int GetManhattanDistanceCost(Tile startTile, Tile destinationTile)

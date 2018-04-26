@@ -35,7 +35,7 @@ public class ResourcePool : MonoBehaviour{
 
     public void ResetPool()
     {
-        List<GameObject> clone = UsedObjectPool;
+        var clone = UsedObjectPool.ToArray();
         
         foreach (var item in clone)
         {
@@ -72,7 +72,7 @@ public class ResourcePool : MonoBehaviour{
 
     bool IsIndexValid(int index, List<GameObject> pool) //TODO: Remove the pool argument?
     {
-        return (index < pool.Count || index > 0);
+        return (index < pool.Count && index >= 0);
     }
     void SetStatusOfComponents(GameObject item, bool enabled)   //TODO: Do I need the ref?
     {

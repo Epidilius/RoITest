@@ -373,7 +373,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GroundTile: {fileID: 1537870704636556, guid: d7689c68e8480be4f90688be06a6f559, type: 2}
-  RoadTile: {fileID: 1812682379716124, guid: 07157fb2a5426fd4193b2f470cafa939, type: 2}
   EndpointTile: {fileID: 1812682379716124, guid: 141efd49569dc16449068414bb373555,
     type: 2}
   ConsumerBuilding: {fileID: 1536538828150212, guid: aa0b75da1c57d174baf7aa0c05d333c3,
@@ -392,7 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7d1fd86f27dac45b165df4e9ddb643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PoolBoss: {fileID: 1757582046}
   OpenPathMat: {fileID: 2100000, guid: 856ddbfea8dc1c645b08a9736d9f6385, type: 2}
   ClosedPathMat: {fileID: 2100000, guid: f7f41bb7daa769249a9742636c462dc7, type: 2}
   FinalPathMat: {fileID: 2100000, guid: abb7e2dc149ad604686870ba061f0f99, type: 2}

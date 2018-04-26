@@ -4,7 +4,7 @@ public class Consumer : Building
 {
     //TODO: Fix the new problem where vehicles are only being spawned once. Test this by reducing the time it takes to make a product
     int CurrentVehicleAmount;
-    Producer ClosestProducer;
+    public Producer ClosestProducer;    //TODO: Remove the public once done debugging
 
     public override void Init()
     {
@@ -41,7 +41,7 @@ public class Consumer : Building
 
     bool IsVehicleReady()   //TODO: Rename?
     {
-        return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() < 1);
+        return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() > 1);
     }
 
     void SendVehicle()
@@ -79,7 +79,6 @@ public class Consumer : Building
     {
         GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);    //TODO: I dont like the GetComponents in this class
         AddOneProduct();
-        StartCoroutine(PauseToUnloadVehicle());
         CurrentVehicleAmount++;
     }    
 }

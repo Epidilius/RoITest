@@ -2,8 +2,15 @@
 
 public class Tile : MonoBehaviour
 {
-    Building ChildBuilding = null;  //TODO: Reset this on Pool reset
-    
+    [SerializeField] Material BaseMaterial;
+    Building ChildBuilding;
+
+    public void Init()
+    {
+        SetMaterial(BaseMaterial);
+        SetChildBuilding(null);
+    }
+
     public Building GetChildBuilding()
     {
         return ChildBuilding;
