@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4329247106681164}
   - component: {fileID: 23434030281763022}
   - component: {fileID: 102605456931646076}
+  - component: {fileID: 114605002318487934}
   m_Layer: 0
   m_Name: ProductAmount
   m_TagString: Untagged
@@ -193,6 +194,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionTimeInMinutes: 0
+--- !u!114 &114605002318487934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457716961657728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674fdba6f318d6b4287e5e43d9a47d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!208 &208128889390756344
 NavMeshObstacle:
   m_ObjectHideFlags: 1

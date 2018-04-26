@@ -3,9 +3,9 @@ using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
 {
-    //TODO: Fix freezes
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
+    [SerializeField] Material RoadMaterial;
     #endregion
 
     void Start()
@@ -109,6 +109,11 @@ public class WorldBuilder : MonoBehaviour
             {
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
                 var path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
+                foreach(var road in path)
+                {
+                    road.gameObject.GetComponent<NavMeshSourceTag>().enabled = true;
+                    road.GetTile().SetMaterial(RoadMaterial);
+                }
                 //TODO Use the path var to spawn roads
             }
         }

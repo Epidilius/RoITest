@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 1169640656}
   - component: {fileID: 1169640655}
   - component: {fileID: 1169640654}
+  - component: {fileID: 1169640659}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -276,6 +277,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1169640659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1169640653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8181600b29acdb4282b4b7893ee3b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSensitivity: 90
+  climbSpeed: 4
+  normalMoveSpeed: 10
+  slowMoveFactor: 0.25
+  fastMoveFactor: 3
 --- !u!1 &1296449864
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,6 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PoolBoss: {fileID: 1757582046}
+  RoadMaterial: {fileID: 2100000, guid: cc95abb4342e4a8408c66915164ce0a1, type: 2}
 --- !u!4 &1757582045
 Transform:
   m_ObjectHideFlags: 0
@@ -394,4 +412,3 @@ MonoBehaviour:
   OpenPathMat: {fileID: 2100000, guid: 856ddbfea8dc1c645b08a9736d9f6385, type: 2}
   ClosedPathMat: {fileID: 2100000, guid: f7f41bb7daa769249a9742636c462dc7, type: 2}
   FinalPathMat: {fileID: 2100000, guid: abb7e2dc149ad604686870ba061f0f99, type: 2}
-  RoadMaterial: {fileID: 2100000, guid: cc95abb4342e4a8408c66915164ce0a1, type: 2}

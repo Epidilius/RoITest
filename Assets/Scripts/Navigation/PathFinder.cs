@@ -8,7 +8,6 @@ public class PathFinder : MonoBehaviour
     public Material OpenPathMat;
     public Material ClosedPathMat;
     public Material FinalPathMat;
-    public Material RoadMaterial;
 
     //STATE
     enum PathFinderState
@@ -192,7 +191,7 @@ public class PathFinder : MonoBehaviour
         
         return tile;
     }
-    
+
     bool DoesTileExistInClosedList(Tile tile)
     {
         //var matches = PathNodeClosed.Where(x => x.GetTile() == tile);
@@ -212,6 +211,60 @@ public class PathFinder : MonoBehaviour
     bool DoesTileExistInOpenList(Tile tile) 
     {
         return GetOpenPathNodeForTile(tile) != null;    //TODO: Redo this to look like the Closed function?
+    }    
+
+    void AddPathNodeToOpenList(PathNode node)
+    {
+        //node.GetTile().SetMaterial(OpenPathMat);
+        PathNodeOpen.Add(node);
+        SortOpenList();
+    }
+    void MoveNodeToClosedList(PathNode node)
+    {
+        //node.GetTile().SetMaterial(ClosedPathMat);
+        PathNodeClosed.Add(node);
+        PathNodeOpen.Remove(node);
+    }
+
+    void SortOpenList()
+    {
+        PathNodeOpen = PathNodeOpen.OrderBy(x => x.GetFScore()).ToList();
+    }
+    void BuildFinalNodePath(PathNode node)
+    {
+        do
+        {
+            //node.GetTile().SetMaterial(FinalPathMat);
+            PathNodeFinal.Insert(0, node);
+            node = node.GetParent();
+        } while (node != null);
+    }
+    
+    void ClearPathNodes()
+    {
+        ClearDataFromNodes(PathNodeOpen);
+        ClearDataFromNodes(PathNodeClosed);
+        ClearDataFromNodes(PathNodeFinal);
+
+        PathNodeOpen.Clear();
+        PathNodeClosed.Clear();
+        PathNodeFinal.Clear();
+    }
+    void ClearDataFromNodes(List<PathNode> nodes)
+    {
+        for(int i = 0; i < nodes.Count; i++)
+        {
+            ClearParentsFromNode(nodes[i]);
+            RemoveNavMeshFromNode(nodes[i]);
+        }
+    }
+    void ClearParentsFromNode(PathNode node)
+    {
+        node.SetParent(null);
+    }
+    void RemoveNavMeshFromNode(PathNode node)
+    {
+        node.gameObject.GetComponent<NavMeshSourceTag>().enabled = false;
     }
 
     PathNode GetOpenPathNodeForTile(Tile tile)
@@ -228,64 +281,6 @@ public class PathFinder : MonoBehaviour
 
         return null;
     }
-    
-    void SortOpenList()
-    {
-        PathNodeOpen = PathNodeOpen.OrderBy(x => x.GetFScore()).ToList();
-    }
-
-    void AddPathNodeToOpenList(PathNode node)
-    {
-        //node.GetTile().SetMaterial(OpenPathMat);
-        PathNodeOpen.Add(node);
-        SortOpenList();
-    }
-    void MoveNodeToClosedList(PathNode node)
-    {
-        //node.GetTile().SetMaterial(ClosedPathMat);
-        PathNodeClosed.Add(node);
-        PathNodeOpen.Remove(node);
-    }
-
-    void BuildFinalNodePath(PathNode node)
-    {
-        do
-        {
-            if(node.GetParent() != null)
-            {
-                PathNodeFinal.Insert(0, node);
-            }
-
-            //node.GetTile().SetMaterial(FinalPathMat);
-            //TODO: Move some of this to a new function? 
-            if (node.gameObject.GetComponent<NavMeshSourceTag>() == null)
-            {
-                node.gameObject.AddComponent(typeof(NavMeshSourceTag));
-            }
-
-            node.GetTile().SetMaterial(RoadMaterial);
-            node = node.GetParent();
-        } while (node != null);
-    }
-    
-    void ClearPathNodes()
-    {
-        ClearParentsFromNode(PathNodeOpen);
-        ClearParentsFromNode(PathNodeClosed);
-        ClearParentsFromNode(PathNodeFinal);
-
-        PathNodeOpen.Clear();
-        PathNodeClosed.Clear();
-        PathNodeFinal.Clear();
-    }
-    void ClearParentsFromNode(List<PathNode> nodes)
-    {
-        for(int i = 0; i < nodes.Count; i++)
-        {
-            nodes[i].SetParent(null);
-        }
-    }
-
     int GetManhattanDistanceCost(Tile startTile, Tile destinationTile)
     {
         Vector3 start = startTile.transform.position;

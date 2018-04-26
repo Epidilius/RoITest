@@ -26,7 +26,7 @@ public class Building : MonoBehaviour
     }
     void UpdateProductGUI()
     {
-        gameObject.GetComponentInChildren<TextMesh>().text = CurrentProductAmount.ToString();
+        gameObject.GetComponentInChildren<TextMesh>().text = CurrentProductAmount.ToString() + "\r\n";
     }
 
     public void SetMaxProductAmount(int max)
