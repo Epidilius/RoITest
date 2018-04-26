@@ -9,11 +9,11 @@ public class Vehicle : MonoBehaviour
     {
         Inactive = 0,
         InTransit,
-        AtDestination,
-        AtHome
+        AtProducer,
+        AtConsumer
     }
-    GameObject Home;
-    GameObject Destination;
+    GameObject Consumer;
+    GameObject Producer;
     NavMeshAgent Agent;
     Time ArrivalTime;
     VehicleState CurrentState;
@@ -25,30 +25,13 @@ public class Vehicle : MonoBehaviour
         CurrentState = VehicleState.Inactive;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetConsumer(GameObject consumer)
     {
-        if(CurrentState == VehicleState.AtDestination)
-        {
-            StartCoroutine(PauseBetweenJobs());
-            CurrentState = VehicleState.InTransit;
-            SetDestination(Home);
-            StartDriving();
-        }
+        Consumer = consumer;
     }
-
-    IEnumerator PauseBetweenJobs()
+    public void SetProducer(GameObject producer)
     {
-        yield return new WaitForSeconds(5);
-    }
-
-    public void SetHome(GameObject home)
-    {
-        Home = home;
-    }
-    public void SetDestination(GameObject destination)
-    {
-        Destination = destination;  //TODO: Do this? Or just set the AI Agent's target?
+        Producer = producer;  //TODO: Do this? Or just set the AI Agent's target?
     }
     public void SetTransform(Transform newTransform)
     {
@@ -58,8 +41,21 @@ public class Vehicle : MonoBehaviour
     public bool StartDriving()
     {
         Agent.isStopped = false;
+        var destinationSet = false;
+
+        if (CurrentState == VehicleState.AtProducer)
+        {
+            destinationSet = Agent.SetDestination(Consumer.transform.position);
+        }
+        else
+        {
+            destinationSet =  Agent.SetDestination(Producer.transform.position);
+        }
+
         CurrentState = VehicleState.InTransit;
-        return Agent.SetDestination(Destination.transform.position);  //TODO: Wrap in a try/catch? No, just find a way to ONLY call this after pathing is done
+
+        return destinationSet;
+        //TODO: Wrap in a try/catch? No, just find a way to ONLY call this after pathing is done
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,23 +63,26 @@ public class Vehicle : MonoBehaviour
         if(other.tag == "Destination")
         {
             //TODO: Pause, then continue
-            //TODO: Differentiate between Consumer and Producer destinations. Maybe have two endpoint types?
-
-            if(other.gameObject == Destination && Destination == Home)
+            //TODO: Undupe this code
+            if (other.gameObject == Consumer && CurrentState != VehicleState.AtConsumer && Vector3.Distance(Agent.destination, Consumer.transform.position) < 0.2)
             {
                 Debug.Log("Vehicle reached home");
-                CurrentState = VehicleState.AtHome;
+                CurrentState = VehicleState.AtConsumer;
                 Agent.isStopped = true;
 
                 var tile = other.gameObject.transform.parent.GetComponent<Tile>();
-                var consumer = tile.GetChildBuilding().GetComponent<Consumer>();
+                var consumer = tile.GetChildBuilding().GetComponent<Building>();
                 consumer.VehicleArrived(gameObject);
             }
-            else if(other.gameObject == Destination)
+            else if(other.gameObject == Producer && CurrentState != VehicleState.AtProducer && Vector3.Distance(Agent.destination, Producer.transform.position) < 0.2)
             {
                 Debug.Log("Vehicle reached destination");
-                CurrentState = VehicleState.AtDestination;
+                CurrentState = VehicleState.AtProducer;
                 Agent.isStopped = true;
+
+                var tile = other.gameObject.transform.parent.GetComponent<Tile>();
+                var producer = tile.GetChildBuilding().GetComponent<Building>();    //Will using Building instead of Consumer/Producer work?
+                producer.VehicleArrived(gameObject);
             }
         }
     }

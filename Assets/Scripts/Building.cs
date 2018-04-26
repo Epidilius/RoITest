@@ -14,18 +14,19 @@ public class Building : MonoBehaviour
         //TODO: Stuff like find nearest Producer. Maybe move to just be in the Consumer
     }
 
-    protected void OnGUI()
-    {
-        //TODO: Display amount of products
-    }
-
     protected void AddOneProduct()
     {
         CurrentProductAmount++;
+        UpdateProductGUI();
     }
     protected void RemoveOneProduct()
     {
         CurrentProductAmount--;
+        UpdateProductGUI();
+    }
+    void UpdateProductGUI()
+    {
+        gameObject.GetComponentInChildren<TextMesh>().text = CurrentProductAmount.ToString();
     }
 
     public void SetMaxProductAmount(int max)
@@ -48,5 +49,14 @@ public class Building : MonoBehaviour
     public void SetEndpoint(GameObject endpoint)
     {
         Endpoint = endpoint;
+    }
+    public virtual void VehicleArrived(GameObject vehicle)
+    {
+
+    }
+
+    protected IEnumerator PauseToUnloadVehicle()
+    {
+        yield return new WaitForSeconds(5);
     }
 }

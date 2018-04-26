@@ -47,6 +47,8 @@ public class ResourcePool : MonoBehaviour{
 
     public GameObject GetUnusedObject()
     {
+        if (UnusedObjectPool.Count < 1) return null;
+
         var item = UnusedObjectPool[0];
         SetStatusOfComponents(ref item, true);
 
@@ -69,16 +71,16 @@ public class ResourcePool : MonoBehaviour{
     }
     public void RemoveItemFromUsedPool(GameObject item)
     {
-        item.transform.position = UnusedPosition;
+        item.transform.position = UnusedPosition;   //TODO: Better spot for this?
+
         UsedObjectPool.Remove(item);
 
         SetStatusOfComponents(ref item, false);
         UnusedObjectPool.Add(item);
     }
 
-    void SetStatusOfComponents(ref GameObject item, bool enabled)
+    void SetStatusOfComponents(ref GameObject item, bool enabled)   //TODO: Do I need the ref?
     {
-        item.GetComponent<Renderer>().enabled = enabled;
-        item.GetComponent<Collider>().enabled = enabled;
+        item.gameObject.SetActive(enabled);
     }
 }

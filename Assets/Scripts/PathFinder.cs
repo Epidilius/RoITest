@@ -186,17 +186,9 @@ public class PathFinder : MonoBehaviour
         adjacentCoordinate.z += deltaZ;
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
-        GameObject tileObject = null;
-        try
-        {
-            tileObject = PoolBoss.GetGroundTile(tileIndex);
-        }
-        catch(Exception ex)
-        {
-            var temp = -1;
-        }
-
-        if (tileObject == null) return null;
+        GameObject tileObject = PoolBoss.GetGroundTile(tileIndex);
+    
+        if (tileObject == null) return null;    //TODO: Simplify these two lines of code
 
         return tileObject.GetComponent<Tile>();
     }

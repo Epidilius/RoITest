@@ -16,21 +16,24 @@ public class Producer : Building
     // Update is called once per frame
     void Update()
     {
-        TimeToNextProduct -= Time.deltaTime / 100f; //TODO: Do the /100f?
+        TimeToNextProduct -= Time.deltaTime / 60f;
         if(TimeToNextProduct <= 0f)
         {
             CreateProdcut();
         }
     }
 
-    public void VehicleArrived()
+    public override void VehicleArrived(GameObject vehicle)
     {
         RemoveOneProduct();
+        StartCoroutine(PauseToUnloadVehicle());
+        vehicle.GetComponent<Vehicle>().StartDriving();
     }
 
     void CreateProdcut()
     {
         AddOneProduct();
+        FutureProductAmount++;
         TimeToNextProduct = ProductionTime;
     }
 

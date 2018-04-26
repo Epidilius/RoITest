@@ -6,18 +6,19 @@ using UnityEngine;
 public class Consumer : Building
 {
     int CurrentVehicleAmount;
-    GameObject ClosestProducer;
+    Producer ClosestProducer;
+    GameObject Vehicle;
     
     public override void Init()
     {
         CurrentVehicleAmount = Settings.GetVehiclesPerConsumer();
         ClosestProducer = FindNearestProducer();
     }
-    GameObject FindNearestProducer()
+    Producer FindNearestProducer()
     {
         var producers = GameObject.FindGameObjectsWithTag("Producer");
 
-        GameObject closestProducer = null;
+        Producer closestProducer = null;
         float shortestDistance = Mathf.Infinity;
 
         foreach (var producer in producers)
@@ -25,7 +26,7 @@ public class Consumer : Building
             var distance = (producer.transform.position - transform.position).sqrMagnitude;
             if (distance < shortestDistance)
             {
-                closestProducer = producer;
+                closestProducer = producer.GetComponent<Producer>();
                 shortestDistance = distance;
             }
         }
@@ -49,18 +50,24 @@ public class Consumer : Building
 
     void SendVehicle()
     {
+        if(ClosestProducer.GetFutureAmount() < 1)
+        {
+            return;
+        }
+
         var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedVehicle();  //TODO: Better way of doing this
         PrepVehicle(vehicle);
         SetVehicleHome(vehicle);
-        SetVehicleDestination(vehicle);
-        vehicle.GetComponent<Vehicle>().StartDriving(); //TODO: Change these to be Vehicle and Tile types
+        SetVehicleDestination(vehicle); //TODO: Change these to be Vehicle and Tile types
 
-        if(!vehicle.GetComponent<Vehicle>().StartDriving())
+        if (!vehicle.GetComponent<Vehicle>().StartDriving())
         {
+            //TODO: Should I do this? I don't think so 
             GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
             return;
         }
 
+        ClosestProducer.VehicleEnRoute();
         CurrentVehicleAmount--;
     }
     void PrepVehicle(GameObject vehicle)
@@ -70,24 +77,18 @@ public class Consumer : Building
     }
     void SetVehicleHome(GameObject vehicle)
     {
-        vehicle.GetComponent<Vehicle>().SetHome(GetEndpoint());
+        vehicle.GetComponent<Vehicle>().SetConsumer(GetEndpoint());
     }
     void SetVehicleDestination(GameObject vehicle)
     {
-        vehicle.GetComponent<Vehicle>().SetDestination(ClosestProducer.GetComponent<Producer>().GetEndpoint());
+        vehicle.GetComponent<Vehicle>().SetProducer(ClosestProducer.GetComponent<Producer>().GetEndpoint());
     }
 
-    public void VehicleArrived(GameObject vehicle)
+    public override void VehicleArrived(GameObject vehicle)
     {
+        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
         AddOneProduct();
-        StartCoroutine(PauseBetweenJobs());
+        StartCoroutine(PauseToUnloadVehicle());
         CurrentVehicleAmount++;
-        //GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
-    }
-
-    //TODO: This is duplicated in vehicle
-    IEnumerator PauseBetweenJobs()
-    {
-        yield return new WaitForSeconds(5);
-    }
+    }    
 }
