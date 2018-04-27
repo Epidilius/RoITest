@@ -29,7 +29,7 @@ public class Tile : MonoBehaviour
     {
         return GetComponent<PathNode>();
     }
-
+    
     public partial class GroundTile
     {
 

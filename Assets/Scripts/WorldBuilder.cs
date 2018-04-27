@@ -6,10 +6,14 @@ public class WorldBuilder : MonoBehaviour
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
     [SerializeField] Material RoadMaterial;
+
+    //NavMeshPath NavMeshPath;
     #endregion
 
     void Start()
     {
+        //NavMeshPath = new NavMeshPath();
+
         CreateWorld();
         SetupNavBuilder();
     }
@@ -21,6 +25,11 @@ public class WorldBuilder : MonoBehaviour
             PoolBoss.ResetPools();  //TODO: In CreateWorld?
             CreateWorld();
         }
+
+        //if (NavMeshPath.status == NavMeshPathStatus.PathInvalid)
+        //    SpawnRoadTiles();
+        //for (int i = 0; i < NavMeshPath.corners.Length - 1; i++)
+        //    Debug.DrawLine(NavMeshPath.corners[i], NavMeshPath.corners[i + 1], Color.red);
     }
 
     public void CreateWorld()
@@ -108,13 +117,14 @@ public class WorldBuilder : MonoBehaviour
             for(int j = 0; j < Settings.GetNumberOfProducers(); j++)
             {
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
+                //NavMesh.CalculatePath(consumer.GetComponent<Consumer>().GetEndpoint().transform.position, producer.GetComponent<Producer>().GetEndpoint().transform.position, NavMesh.AllAreas, NavMeshPath);
+                
                 var path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
-                foreach(var road in path)
+                foreach (var road in path)
                 {
                     road.gameObject.GetComponent<NavMeshSourceTag>().enabled = true;
                     road.GetTile().SetMaterial(RoadMaterial);
                 }
-                //TODO Use the path var to spawn roads
             }
         }
     }

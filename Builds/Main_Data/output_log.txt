@@ -1,3 +1,13 @@
+Mono path[0] = 'E:/Projects/Unity/RoITest/Builds/Main_Data/Managed'
+Mono config path = 'E:/Projects/Unity/RoITest/Builds/Main_Data/Mono/etc'
+PlayerConnection initialized from E:/Projects/Unity/RoITest/Builds/Main_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55109
+Multi-casting "[IP] 192.168.0.16 [Port] 55109 [Flags] 3 [Guid] 93849533 [EditorId] 4052865284 [Version] 1048832 [Id] WindowsPlayer(JoelsPC) [Debug] 0" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55109]...
+PlayerConnection accepted from [192.168.0.16] handle:0x2b8
+Started listening to [0.0.0.0:55109]
+PlayerConnection already initialized - listening to [0.0.0.0:55109]
+Player data archive not found at `E:/Projects/Unity/RoITest/Builds/Main_Data/data.unity3d`, using local filesystem
 Initialize engine version: 2017.1.0p4 (892c0f8d8f8a)
 GfxDevice: creating device client; threaded=1
 Direct3D:
@@ -21,33 +31,69 @@ Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\UnityEngin
 Loading E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
 Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\System.dll (this message is harmless)
 Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.302 seconds
+- Completed reload, in  0.046 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 29.019093 ms
+UnloadTime: 1.307790 ms
 Failed to create agent because it is not close enough to the NavMesh
- 
-(Filename:  Line: 674)
+UnityEngine.Object:Internal_CloneSingle(Object)
+UnityEngine.Object:Instantiate(GameObject) (at C:\buildslave\unity\build\Runtime\Export\UnityEngineObject.cs:200)
+ResourcePool:InitPool() (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:29)
+ResourcePool:.ctor(Int32, GameObject) (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:22)
+PoolBoss:SetupPools() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:43)
+PoolBoss:Awake() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:31)
+
+[C:/buildslave/unity/build/Runtime/AI/Internal/Components/NavMeshAgent.cpp line 674] 
+(Filename: C:/buildslave/unity/build/Runtime/Export/UnityEngineObject.cs Line: 200)
 
 Failed to create agent because it is not close enough to the NavMesh
- 
-(Filename:  Line: 674)
+UnityEngine.Object:Internal_CloneSingle(Object)
+UnityEngine.Object:Instantiate(GameObject) (at C:\buildslave\unity\build\Runtime\Export\UnityEngineObject.cs:200)
+ResourcePool:InitPool() (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:29)
+ResourcePool:.ctor(Int32, GameObject) (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:22)
+PoolBoss:SetupPools() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:43)
+PoolBoss:Awake() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:31)
+
+[C:/buildslave/unity/build/Runtime/AI/Internal/Components/NavMeshAgent.cpp line 674] 
+(Filename: C:/buildslave/unity/build/Runtime/Export/UnityEngineObject.cs Line: 200)
 
 Failed to create agent because it is not close enough to the NavMesh
- 
-(Filename:  Line: 674)
+UnityEngine.Object:Internal_CloneSingle(Object)
+UnityEngine.Object:Instantiate(GameObject) (at C:\buildslave\unity\build\Runtime\Export\UnityEngineObject.cs:200)
+ResourcePool:InitPool() (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:29)
+ResourcePool:.ctor(Int32, GameObject) (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:22)
+PoolBoss:SetupPools() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:43)
+PoolBoss:Awake() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:31)
+
+[C:/buildslave/unity/build/Runtime/AI/Internal/Components/NavMeshAgent.cpp line 674] 
+(Filename: C:/buildslave/unity/build/Runtime/Export/UnityEngineObject.cs Line: 200)
 
 Failed to create agent because it is not close enough to the NavMesh
- 
-(Filename:  Line: 674)
+UnityEngine.Object:Internal_CloneSingle(Object)
+UnityEngine.Object:Instantiate(GameObject) (at C:\buildslave\unity\build\Runtime\Export\UnityEngineObject.cs:200)
+ResourcePool:InitPool() (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:29)
+ResourcePool:.ctor(Int32, GameObject) (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:22)
+PoolBoss:SetupPools() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:43)
+PoolBoss:Awake() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:31)
+
+[C:/buildslave/unity/build/Runtime/AI/Internal/Components/NavMeshAgent.cpp line 674] 
+(Filename: C:/buildslave/unity/build/Runtime/Export/UnityEngineObject.cs Line: 200)
 
 Failed to create agent because it is not close enough to the NavMesh
- 
-(Filename:  Line: 674)
+UnityEngine.Object:Internal_CloneSingle(Object)
+UnityEngine.Object:Instantiate(GameObject) (at C:\buildslave\unity\build\Runtime\Export\UnityEngineObject.cs:200)
+ResourcePool:InitPool() (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:29)
+ResourcePool:.ctor(Int32, GameObject) (at E:\Projects\Unity\RoITest\Assets\Scripts\ResourcePool.cs:22)
+PoolBoss:SetupPools() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:43)
+PoolBoss:Awake() (at E:\Projects\Unity\RoITest\Assets\Scripts\PoolBoss.cs:31)
+
+[C:/buildslave/unity/build/Runtime/AI/Internal/Components/NavMeshAgent.cpp line 674] 
+(Filename: C:/buildslave/unity/build/Runtime/Export/UnityEngineObject.cs Line: 200)
 
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 2e70 -> priority: 1 
-  Thread -> id: 57f8 -> priority: 1 
-  Thread -> id: 451c -> priority: 1 
-  Thread -> id: 40bc -> priority: 1 
+  Thread -> id: 7b0 -> priority: 1 
+  Thread -> id: 3890 -> priority: 1 
+  Thread -> id: 5f9c -> priority: 1 
+  Thread -> id: 58c0 -> priority: 1 
+Waiting for finish
