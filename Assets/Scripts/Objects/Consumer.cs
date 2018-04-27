@@ -2,46 +2,47 @@
 
 public class Consumer : Building
 {
-    //TODO: Fix the new problem where vehicles are only being spawned once. Test this by reducing the time it takes to make a product
+    [SerializeField] float VehicleCooldownDuration;
+    float VehicleCooldown;
     int CurrentVehicleAmount;
     public Producer ClosestProducer;    //TODO: Remove the public once done debugging
 
     public override void Init()
     {
-        CurrentVehicleAmount = Settings.GetVehiclesPerConsumer();
-        ClosestProducer = FindNearestProducer();
+        VehicleCooldownDuration = Settings.GetMinutesToMakeProduct();
+        CurrentVehicleAmount = Settings.GetVehicleCooldownDuration();
+
+        ResetVehicleCooldown();
+        ResetProduct();
     }
-    Producer FindNearestProducer()
+    public void SetNearestProducer(GameObject producer)
     {
-        var producers = GameObject.FindGameObjectsWithTag("Producer");
-
-        Producer closestProducer = null;
-        float shortestDistance = Mathf.Infinity;
-
-        foreach (var producer in producers)
-        {
-            var distance = (producer.transform.position - transform.position).sqrMagnitude;
-            if (distance < shortestDistance)
-            {
-                closestProducer = producer.GetComponent<Producer>();
-                shortestDistance = distance;
-            }
-        }
-
-        return closestProducer;
+        ClosestProducer = producer.GetComponent<Producer>();
     }
     
     void Update()
     {
-        if(IsVehicleReady())
+        if (IsVehicleReady())
         {
             SendVehicle();
+        }
+        else
+        {
+            VehicleCooldown -= Time.deltaTime / 60f;
+            if (VehicleCooldown <= 0f)
+            {
+                
+            }
         }
     }
 
     bool IsVehicleReady()   //TODO: Rename?
     {
-        return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() > 1);
+        return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() > 0 && VehicleCooldown <= 0f);
+    }
+    void ResetVehicleCooldown()
+    {
+        VehicleCooldown = VehicleCooldownDuration;
     }
 
     void SendVehicle()
@@ -80,5 +81,6 @@ public class Consumer : Building
         GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);    //TODO: I dont like the GetComponents in this class
         AddOneProduct();
         CurrentVehicleAmount++;
+        ResetVehicleCooldown();
     }    
 }

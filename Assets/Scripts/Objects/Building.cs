@@ -13,7 +13,12 @@ public class Building : MonoBehaviour
     {
         
     }
-
+    
+    protected void ResetProduct()
+    {
+        CurrentProductAmount = 0;
+        UpdateProductGUI();
+    }
     protected void AddOneProduct()
     {
         CurrentProductAmount++;

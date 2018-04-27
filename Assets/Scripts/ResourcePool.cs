@@ -36,7 +36,7 @@ public class ResourcePool : MonoBehaviour{
     public void ResetPool()
     {
         //TODO: Something better than this
-        if(PoolType.GetType() == typeof(Vehicle))
+        if(PoolType.GetComponent<Vehicle>() != null)
         {
             var clone = UsedObjectPool.ToArray();
 

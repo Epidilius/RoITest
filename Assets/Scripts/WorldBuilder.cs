@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
@@ -7,13 +8,14 @@ public class WorldBuilder : MonoBehaviour
     [SerializeField] PoolBoss PoolBoss;
     [SerializeField] Material RoadMaterial;
 
+    List<PathNode> AllPaths;
     //NavMeshPath NavMeshPath;
     #endregion
 
     void Start()
     {
         //NavMeshPath = new NavMeshPath();
-
+        AllPaths = new List<PathNode>();
         CreateWorld();
         SetupNavBuilder();
     }
@@ -22,7 +24,7 @@ public class WorldBuilder : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.R))
         {
-            PoolBoss.ResetPools();  //TODO: In CreateWorld?
+            ResetWorld();
             CreateWorld();
         }
 
@@ -42,6 +44,12 @@ public class WorldBuilder : MonoBehaviour
         SpawnEndpointTiles();
         SpawnRoadTiles();
     }
+    void ResetWorld()
+    {
+        PoolBoss.ResetPools();
+        ClearNavMesh();
+        AllPaths.Clear();
+    }
 
     //NAV MESH FUNCTIONS
     void SetupNavBuilder()
@@ -58,6 +66,13 @@ public class WorldBuilder : MonoBehaviour
 
         builder.m_Size = center * 2;
         builder.m_Size.y = 20;
+    }
+    void ClearNavMesh()
+    {
+        for(int i = 0; i < AllPaths.Count; i++)
+        {
+            AllPaths[i].GetComponent<NavMeshSourceTag>().enabled = false;
+        }
     }
 
     //TILE FUNCTIONS
@@ -113,16 +128,30 @@ public class WorldBuilder : MonoBehaviour
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i ++)
         {
             var consumer = PoolBoss.GetUsedObject<Consumer>(i);
+            float shortestDistance = Mathf.Infinity;
 
-            for(int j = 0; j < Settings.GetNumberOfProducers(); j++)
+            for (int j = 0; j < Settings.GetNumberOfProducers(); j++)
             {
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
                 //NavMesh.CalculatePath(consumer.GetComponent<Consumer>().GetEndpoint().transform.position, producer.GetComponent<Producer>().GetEndpoint().transform.position, NavMesh.AllAreas, NavMeshPath);
-                
+
                 //TODO: Deal with path being null. Do while?
-                var path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
+                List<PathNode> path = null;
+                do
+                {
+                    path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
+                } while (path == null);
+
+                //TODO: Break this function up
+                if (path.Count < shortestDistance)
+                {
+                    consumer.GetComponent<Consumer>().SetNearestProducer(producer);
+                    shortestDistance = path.Count;
+                }
+
                 foreach (var road in path)
                 {
+                    AllPaths.Add(road);
                     road.gameObject.GetComponent<NavMeshSourceTag>().enabled = true;
                     road.GetTile().SetMaterial(RoadMaterial);
                 }
@@ -165,7 +194,7 @@ public class WorldBuilder : MonoBehaviour
         building.GetComponent<Building>().SetParentTile(tileToUse);
         building.GetComponent<Building>().Init();
     }
-
+   
     void SetPositionAndRotation(GameObject gameObject, Vector3 position, Quaternion rotation)
     {
         gameObject.transform.position = position;

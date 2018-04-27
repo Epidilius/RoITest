@@ -36,6 +36,9 @@ public class Vehicle : MonoBehaviour
     
     public bool StartDriving()
     {
+        if (!Agent.isActiveAndEnabled || !Agent.isOnNavMesh)
+            return false;
+
         Agent.isStopped = false;
         var destinationSet = false;
 

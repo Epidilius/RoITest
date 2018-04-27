@@ -173,8 +173,8 @@ public class PathFinder : MonoBehaviour
         deltaZ *= Settings.GetTileSize();
 
         Vector3 adjacentCoordinate = currentTile.transform.position;
-        adjacentCoordinate.x += deltaX;
-        adjacentCoordinate.z += deltaZ;
+        adjacentCoordinate.x = Mathf.Clamp(adjacentCoordinate.x + deltaX, 0, Settings.GetWorldSize().x * Settings.GetTileSize());
+        adjacentCoordinate.z = Mathf.Clamp(adjacentCoordinate.z + deltaZ, 0, Settings.GetWorldSize().y * Settings.GetTileSize());
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
         var tileObject = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUsedObject<Tile.GroundTile>(tileIndex);
@@ -255,16 +255,11 @@ public class PathFinder : MonoBehaviour
         for(int i = 0; i < nodes.Count; i++)
         {
             ClearParentsFromNode(nodes[i]);
-            RemoveNavMeshFromNode(nodes[i]);
         }
     }
     void ClearParentsFromNode(PathNode node)
     {
         node.SetParent(null);
-    }
-    void RemoveNavMeshFromNode(PathNode node)
-    {
-        node.gameObject.GetComponent<NavMeshSourceTag>().enabled = false;
     }
 
     PathNode GetOpenPathNodeForTile(Tile tile)

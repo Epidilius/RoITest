@@ -10,20 +10,21 @@ public class Producer : Building
     {
         ProductionTimeInMinutes = Settings.GetMinutesToMakeProduct();
         ResetTimeToNextProduct();
+        ResetProduct();
     }
     
     void Update()
     {
-        TimeToNextProduct -= Time.deltaTime / 6f;
+        TimeToNextProduct -= Time.deltaTime / 60f;
         if(TimeToNextProduct <= 0f)
         {
-            CreateProdcut();
+            CreateProduct();
         }
     }
 
 
     //PRODUCT RELATED
-    void CreateProdcut()
+    void CreateProduct()
     {
         AddOneProduct();
         FutureProductAmount++;
