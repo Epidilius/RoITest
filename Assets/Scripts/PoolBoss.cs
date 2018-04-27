@@ -3,8 +3,7 @@
 public class PoolBoss : MonoBehaviour
 {
 
-    //TODO: Make this a singleton, or maybe static? Or do I just leave it as a MonoBehaviour? 
-    //TODO: Can I condense further?
+    //TODO: Make this a Job
 
     #region VARIABLES 
     //TILES 
@@ -44,13 +43,23 @@ public class PoolBoss : MonoBehaviour
     }
     public void ResetPools()
     {
-        GroundTilePool.ResetPool();
-        EndpointTilePool.ResetPool();
+        ResetPool<Vehicle>();
 
-        ConsumerPool.ResetPool();
-        ProducerPool.ResetPool();
+        ResetPool<Tile.GroundTile>();
+        ResetPool<Tile.EndpointTile>();
 
-        VehiclePool.ResetPool();
+        ResetPool<Consumer>();
+        ResetPool<Producer>();
+    }
+    public void ResetPool<T>(bool quickReset = true)
+    {
+        if (typeof(T) == typeof(Vehicle))                   VehiclePool.Reset(quickReset);
+
+        else if (typeof(T) == typeof(Tile.GroundTile))      GroundTilePool.Reset(quickReset);
+        else if (typeof(T) == typeof(Tile.EndpointTile))    EndpointTilePool.Reset(quickReset);
+
+        else if (typeof(T) == typeof(Consumer))             ConsumerPool.Reset(quickReset);
+        else if (typeof(T) == typeof(Producer))             ProducerPool.Reset(quickReset);
     }
     
     public GameObject GetUnusedObject<T>()

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile : Object
 {
     [SerializeField] Material BaseMaterial;
     Building ChildBuilding;

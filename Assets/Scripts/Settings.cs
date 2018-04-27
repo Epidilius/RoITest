@@ -7,7 +7,7 @@ public static class Settings
     static int NumberOfConsumers = 5;
     static int MaxVehiclesPerConsumer = 1;
     static int MinutesToMakeProduct = 1;
-    static int VehicleCooldownDurationModifier = 2;
+    static int VehicleCooldownDurationModifier = 1;
     static int TileSize = 5;
    
     public static void SetWorldSize(Vector2 size)
@@ -57,7 +57,7 @@ public static class Settings
     }
     public static int GetVehicleCooldownDuration()
     {
-        return MinutesToMakeProduct * VehicleCooldownDurationModifier;
+        return MinutesToMakeProduct * (VehicleCooldownDurationModifier * (GetNumberOfConsumers() / GetNumberOfProducers()));
     }
     public static int GetTileSize()
     {

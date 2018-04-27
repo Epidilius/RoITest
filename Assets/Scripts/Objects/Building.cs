@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : Object
 {
     int MaxProducts = 999;
     int CurrentProductAmount = 0;
@@ -58,5 +58,10 @@ public class Building : MonoBehaviour
     public virtual void VehicleArrived(GameObject vehicle)
     {
 
+    }
+
+    public override void ResetObject()
+    {
+        
     }
 }

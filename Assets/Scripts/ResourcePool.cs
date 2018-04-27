@@ -33,18 +33,28 @@ public class ResourcePool : MonoBehaviour{
         }
     }
 
-    public void ResetPool()
+    public void Reset(bool quickReset)
     {
-        //TODO: Something better than this
-        if(PoolType.GetComponent<Vehicle>() != null)
+        if(quickReset)
         {
-            var clone = UsedObjectPool.ToArray();
-
-            foreach (var item in clone)
-            {
-                RemoveItemFromUsedPool(item);
-            }
+            QuickReset();
         }
+        else
+        {
+            ResetPool();
+        }
+    }
+    void ResetPool()
+    {
+        var clone = UsedObjectPool.ToArray();
+
+        foreach (var item in clone)
+        {
+            RemoveItemFromUsedPool(item);
+        }
+    }
+    void QuickReset()
+    {
         UnusedObjectPool = AllObjectPool.GetRange(0, AllObjectPool.Count);
         UsedObjectPool.Clear();
     }

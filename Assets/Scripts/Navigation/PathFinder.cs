@@ -173,8 +173,8 @@ public class PathFinder : MonoBehaviour
         deltaZ *= Settings.GetTileSize();
 
         Vector3 adjacentCoordinate = currentTile.transform.position;
-        adjacentCoordinate.x = Mathf.Clamp(adjacentCoordinate.x + deltaX, 0, Settings.GetWorldSize().x * Settings.GetTileSize());
-        adjacentCoordinate.z = Mathf.Clamp(adjacentCoordinate.z + deltaZ, 0, Settings.GetWorldSize().y * Settings.GetTileSize());
+        adjacentCoordinate.x += deltaX;
+        adjacentCoordinate.z += deltaZ;
 
         var tileIndex = GetTileIndex(adjacentCoordinate);
         var tileObject = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUsedObject<Tile.GroundTile>(tileIndex);
