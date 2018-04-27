@@ -119,6 +119,7 @@ public class WorldBuilder : MonoBehaviour
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
                 //NavMesh.CalculatePath(consumer.GetComponent<Consumer>().GetEndpoint().transform.position, producer.GetComponent<Producer>().GetEndpoint().transform.position, NavMesh.AllAreas, NavMeshPath);
                 
+                //TODO: Deal with path being null. Do while?
                 var path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
                 foreach (var road in path)
                 {

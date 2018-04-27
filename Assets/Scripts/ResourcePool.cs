@@ -35,12 +35,18 @@ public class ResourcePool : MonoBehaviour{
 
     public void ResetPool()
     {
-        var clone = UsedObjectPool.ToArray();
-        
-        foreach (var item in clone)
+        //TODO: Something better than this
+        if(PoolType.GetType() == typeof(Vehicle))
         {
-            RemoveItemFromUsedPool(item);
+            var clone = UsedObjectPool.ToArray();
+
+            foreach (var item in clone)
+            {
+                RemoveItemFromUsedPool(item);
+            }
         }
+        UnusedObjectPool = AllObjectPool.GetRange(0, AllObjectPool.Count);
+        UsedObjectPool.Clear();
     }
 
     public GameObject GetUnusedObject()
