@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Vehicle : MonoBehaviour
+public class Vehicle : RoITestObject
 {
     enum VehicleState
     {
@@ -78,5 +78,10 @@ public class Vehicle : MonoBehaviour
     {
         Agent.isStopped = true;
         buildingObject.transform.parent.GetComponent<Tile>().GetChildBuilding().VehicleArrived(gameObject);
+    }
+
+    public override void Init()
+    {
+        
     }
 }

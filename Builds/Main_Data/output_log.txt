@@ -21,11 +21,11 @@ Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\UnityEngin
 Loading E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
 Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\System.dll (this message is harmless)
 Platform assembly: E:\Projects\Unity\RoITest\Builds\Main_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.052 seconds
+- Completed reload, in  0.025 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.225480 ms
+UnloadTime: 1.498658 ms
 Failed to create agent because it is not close enough to the NavMesh
  
 (Filename:  Line: 674)
@@ -47,7 +47,7 @@ Failed to create agent because it is not close enough to the NavMesh
 (Filename:  Line: 674)
 
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 590c -> priority: 1 
-  Thread -> id: 3788 -> priority: 1 
-  Thread -> id: 4c1c -> priority: 1 
-  Thread -> id: 5544 -> priority: 1 
+  Thread -> id: 4c2c -> priority: 1 
+  Thread -> id: 225c -> priority: 1 
+  Thread -> id: 228c -> priority: 1 
+  Thread -> id: 2d38 -> priority: 1 

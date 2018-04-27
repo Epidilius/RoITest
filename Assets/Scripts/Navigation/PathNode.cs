@@ -31,15 +31,7 @@ public class PathNode : MonoBehaviour
     {
         if(Parent != null)
         {
-            try
-            {
-                return Parent.GetGScore() + 1;  //TODO :THIS CAUSED A STACK OVERFLOW
-            }
-            catch(Exception ex)
-            {
-                Debug.Log(ex.Message);
-                return 1;
-            }
+            return Parent.GetGScore() + 1; 
         }
         return 1;
     }

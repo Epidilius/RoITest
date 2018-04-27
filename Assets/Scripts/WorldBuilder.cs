@@ -9,7 +9,6 @@ public class WorldBuilder : MonoBehaviour
     [SerializeField] Material RoadMaterial;
 
     List<PathNode> AllPaths;
-    //NavMeshPath NavMeshPath;
     #endregion
 
     void Start()
@@ -27,11 +26,6 @@ public class WorldBuilder : MonoBehaviour
             ResetWorld();
             CreateWorld();
         }
-
-        //if (NavMeshPath.status == NavMeshPathStatus.PathInvalid)
-        //    SpawnRoadTiles();
-        //for (int i = 0; i < NavMeshPath.corners.Length - 1; i++)
-        //    Debug.DrawLine(NavMeshPath.corners[i], NavMeshPath.corners[i + 1], Color.red);
     }
 
     public void CreateWorld()
@@ -69,7 +63,7 @@ public class WorldBuilder : MonoBehaviour
     }
     void ClearNavMesh()
     {
-        for(int i = 0; i < AllPaths.Count; i++)
+        for (int i = 0; i < AllPaths.Count; i++)
         {
             AllPaths[i].GetComponent<NavMeshSourceTag>().enabled = false;
         }
@@ -135,7 +129,6 @@ public class WorldBuilder : MonoBehaviour
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
                 //NavMesh.CalculatePath(consumer.GetComponent<Consumer>().GetEndpoint().transform.position, producer.GetComponent<Producer>().GetEndpoint().transform.position, NavMesh.AllAreas, NavMeshPath);
 
-                //TODO: Deal with path being null. Do while?
                 List<PathNode> path = null;
                 do
                 {

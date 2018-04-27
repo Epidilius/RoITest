@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : Object
+public class Building : RoITestObject
 {
     int MaxProducts = 999;
     int CurrentProductAmount = 0;
     GameObject ParentTile;  //TODO: Tile?
     GameObject Endpoint;
 
-    public virtual void Init()
+    public override void Init()
     {
         
     }
@@ -58,10 +58,5 @@ public class Building : Object
     public virtual void VehicleArrived(GameObject vehicle)
     {
 
-    }
-
-    public override void ResetObject()
-    {
-        
     }
 }

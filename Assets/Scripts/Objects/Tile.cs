@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 
-public class Tile : Object
+public class Tile : RoITestObject
 {
     [SerializeField] Material BaseMaterial;
     Building ChildBuilding;
 
-    public void Init()
+    public override void Init()
     {
+        GetComponent<NavMeshSourceTag>().enabled = false;
         SetMaterial(BaseMaterial);
         SetChildBuilding(null);
     }

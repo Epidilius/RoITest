@@ -51,15 +51,15 @@ public class PoolBoss : MonoBehaviour
         ResetPool<Consumer>();
         ResetPool<Producer>();
     }
-    public void ResetPool<T>(bool quickReset = true)
+    public void ResetPool<T>()
     {
-        if (typeof(T) == typeof(Vehicle))                   VehiclePool.Reset(quickReset);
+        if (typeof(T) == typeof(Vehicle))                   VehiclePool.ResetPool();
 
-        else if (typeof(T) == typeof(Tile.GroundTile))      GroundTilePool.Reset(quickReset);
-        else if (typeof(T) == typeof(Tile.EndpointTile))    EndpointTilePool.Reset(quickReset);
+        else if (typeof(T) == typeof(Tile.GroundTile))      GroundTilePool.ResetPool();
+        else if (typeof(T) == typeof(Tile.EndpointTile))    EndpointTilePool.ResetPool();
 
-        else if (typeof(T) == typeof(Consumer))             ConsumerPool.Reset(quickReset);
-        else if (typeof(T) == typeof(Producer))             ProducerPool.Reset(quickReset);
+        else if (typeof(T) == typeof(Consumer))             ConsumerPool.ResetPool();
+        else if (typeof(T) == typeof(Producer))             ProducerPool.ResetPool();
     }
     
     public GameObject GetUnusedObject<T>()

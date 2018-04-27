@@ -33,30 +33,15 @@ public class ResourcePool : MonoBehaviour{
         }
     }
 
-    public void Reset(bool quickReset)
-    {
-        if(quickReset)
-        {
-            QuickReset();
-        }
-        else
-        {
-            ResetPool();
-        }
-    }
-    void ResetPool()
+    public void ResetPool()
     {
         var clone = UsedObjectPool.ToArray();
-
+        
         foreach (var item in clone)
         {
+            //item.GetComponent<RoITestObject>().Init();
             RemoveItemFromUsedPool(item);
         }
-    }
-    void QuickReset()
-    {
-        UnusedObjectPool = AllObjectPool.GetRange(0, AllObjectPool.Count);
-        UsedObjectPool.Clear();
     }
 
     public GameObject GetUnusedObject()
@@ -82,7 +67,8 @@ public class ResourcePool : MonoBehaviour{
     public void RemoveItemFromUsedPool(GameObject item)
     {
         UsedObjectPool.Remove(item);
-        SetStatusOfComponents(item, false);
+        item.transform.position = UnusedPosition;
+        //SetStatusOfComponents(item, false);
         UnusedObjectPool.Add(item);
     }
 
