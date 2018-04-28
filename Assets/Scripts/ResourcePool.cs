@@ -71,7 +71,7 @@ public class ResourcePool : MonoBehaviour{
         UnusedObjectPool.Add(item);
     }
 
-    bool IsIndexValid(int index, List<GameObject> pool) //TODO: Remove the pool argument?
+    bool IsIndexValid(int index, List<GameObject> pool)
     {
         return (index < pool.Count && index >= 0);
     }

@@ -80,7 +80,6 @@ public class Vehicle : RoITestObject
 
     public override void Init()
     {
-        //TODO: A better way
         gameObject.SetActive(false);
     }
 }

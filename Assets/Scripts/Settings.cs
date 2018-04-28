@@ -63,4 +63,8 @@ public static class Settings
     {
         return TileSize;
     }
+    public static int GetNumberOfVehicles()
+    {
+        return GetVehiclesPerConsumer() * GetNumberOfConsumers();
+    }
 }

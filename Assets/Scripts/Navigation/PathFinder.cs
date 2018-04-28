@@ -23,8 +23,9 @@ public class PathFinder : MonoBehaviour
     List<PathNode> PathNodeOpen;
     List<PathNode> PathNodeClosed;
     List<PathNode> PathNodeFinal;
-    List<Tile> AdjacentNodes;   //TODO: Can I get rid of this?
+    List<Tile> AdjacentNodes;
 
+    //TODO: Make this a Job
     private void Awake()
     {
         CurrentState = PathFinderState.StateIdle;
@@ -32,7 +33,7 @@ public class PathFinder : MonoBehaviour
         PathNodeOpen = new List<PathNode>();
         PathNodeClosed = new List<PathNode>();
         PathNodeFinal = new List<PathNode>();
-        AdjacentNodes = new List<Tile>();   //TODO: Do I need this?
+        AdjacentNodes = new List<Tile>();
     }
 
     public void Reset()
@@ -40,19 +41,7 @@ public class PathFinder : MonoBehaviour
         CurrentState = PathFinderState.StateIdle;
         ClearPathNodes();
     }
-
-    public List<PathNode> FindPath(GameObject startingobject, GameObject destinationObject)
-    {
-        if(startingobject == null || destinationObject == null)
-        {
-            return null;
-        }
-
-        var startTile = startingobject.GetComponent<Tile>();
-        var destinationTile = destinationObject.GetComponent<Tile>();
-
-        return FindPath(startTile, destinationTile);
-    }
+    
     public List<PathNode> FindPath(Tile startingTile, Tile destinationTile)//TODO: Refactor?
     {
         Reset();
@@ -151,6 +140,11 @@ public class PathFinder : MonoBehaviour
 
     int GetTileIndex(Tile tile)
     {
+        if(tile == null)
+        {
+            return -1;
+        }
+
         return GetTileIndex(tile.transform.position);
     }
     int GetTileIndex(Vector3 coordinates)
@@ -158,7 +152,7 @@ public class PathFinder : MonoBehaviour
         return (int)((coordinates.x * Settings.GetWorldSize().y) + coordinates.z) / Settings.GetTileSize();
     }
     
-    void FindAjacentTiles(Tile currentTile) //TODO: Return type?
+    void FindAjacentTiles(Tile currentTile)
     {
         AdjacentNodes.Clear();
 
@@ -194,23 +188,23 @@ public class PathFinder : MonoBehaviour
 
     bool DoesTileExistInClosedList(Tile tile)
     {
-        //var matches = PathNodeClosed.Where(x => x.GetTile() == tile);
-        //return matches.Count() > 0;
-        int tileIndex = GetTileIndex(tile);
+        var matches = PathNodeClosed.Where(x => x.GetTile() == tile);
+        return matches.Count() > 0;
+        //int tileIndex = GetTileIndex(tile);
 
-        for (int i = 0; i < PathNodeClosed.Count; i++)
-        {
-            if (GetTileIndex(PathNodeClosed[i].GetTile()) == tileIndex)
-            {
-                return true;
-            }
-        }
+        //for (int i = 0; i < PathNodeClosed.Count; i++)
+        //{
+        //    if (GetTileIndex(PathNodeClosed[i].GetTile()) == tileIndex)
+        //    {
+        //        return true;
+        //    }
+        //}
 
-        return false;
+        //return false;
     }
     bool DoesTileExistInOpenList(Tile tile) 
     {
-        return GetOpenPathNodeForTile(tile) != null;    //TODO: Redo this to look like the Closed function?
+        return GetOpenPathNodeForTile(tile) != null;
     }    
 
     void AddPathNodeToOpenList(PathNode node)

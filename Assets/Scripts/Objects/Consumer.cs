@@ -5,7 +5,7 @@ public class Consumer : Building
     [SerializeField] float VehicleCooldownDuration;
     float VehicleCooldown;
     int CurrentVehicleAmount;
-    public Producer ClosestProducer;    //TODO: Remove the public once done debugging
+    Producer ClosestProducer;
 
     public override void Init()
     {
@@ -22,7 +22,7 @@ public class Consumer : Building
     
     void Update()
     {
-        if (IsVehicleReady())
+        if (ShouldSendVehicle())
         {
             SendVehicle();
         }
@@ -36,7 +36,7 @@ public class Consumer : Building
         }
     }
 
-    bool IsVehicleReady()   //TODO: Rename?
+    bool ShouldSendVehicle()
     {
         return (CurrentVehicleAmount > 0 && ClosestProducer.GetFutureAmount() > 0 && VehicleCooldown <= 0f);
     }
@@ -48,7 +48,7 @@ public class Consumer : Building
     void SendVehicle()
     {
         Debug.Log(name + " sending vehicle to " + ClosestProducer.name);
-        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Better way of doing this
+        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Better way of doing this. Maybe assign each consumer a vehicle?
         PrepVehicle(vehicle.GetComponent<Vehicle>());
 
         if (!vehicle.GetComponent<Vehicle>().StartDriving())
@@ -79,7 +79,7 @@ public class Consumer : Building
 
     public override void VehicleArrived(GameObject vehicle)
     {
-        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);    //TODO: I dont like the GetComponents in this class
+        GameObject.Find("WorldBoss").GetComponent<PoolBoss>().ReturnItemToPool(vehicle);
         AddOneProduct();
         CurrentVehicleAmount++;
         ResetVehicleCooldown();

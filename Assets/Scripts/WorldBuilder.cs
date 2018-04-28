@@ -6,8 +6,6 @@ public class WorldBuilder : MonoBehaviour
 {
     #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
-    [SerializeField] Material RoadMaterial;
-
     List<PathNode> AllPaths;
     #endregion
 
@@ -112,7 +110,7 @@ public class WorldBuilder : MonoBehaviour
         var position = building.transform.position;
         position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
         position.y = 0.1f;
-        var rotation = building.transform.rotation; //TODO: Better rotation
+        var rotation = building.transform.rotation;
         rotation.y = 1;   //TODO: Based on the XY the rotation should be
 
         endpoint.AddComponent(typeof(NavMeshSourceTag));
@@ -129,28 +127,35 @@ public class WorldBuilder : MonoBehaviour
             for (int j = 0; j < Settings.GetNumberOfProducers(); j++)
             {
                 var producer = PoolBoss.GetUsedObject<Producer>(j);
-                //NavMesh.CalculatePath(consumer.GetComponent<Consumer>().GetEndpoint().transform.position, producer.GetComponent<Producer>().GetEndpoint().transform.position, NavMesh.AllAreas, NavMeshPath);
+                
+                var path = GetPathForRoad(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
 
-                List<PathNode> path = null;
-                do
-                {
-                    path = GetComponent<PathFinder>().FindPath(consumer.GetComponent<Consumer>().GetParentTile(), producer.GetComponent<Producer>().GetParentTile());
-                } while (path == null);
-
-                //TODO: Break this function up
                 if (path.Count < shortestDistance)
                 {
                     consumer.GetComponent<Consumer>().SetNearestProducer(producer);
                     shortestDistance = path.Count;
                 }
 
-                foreach (var road in path)
-                {
-                    AllPaths.Add(road);
-                    road.gameObject.GetComponent<NavMeshSourceTag>().enabled = true;
-                    road.GetTile().SetMaterial(RoadMaterial);
-                }
+                AddRoadToAllPaths(path);
             }
+        }
+    }
+    List<PathNode> GetPathForRoad(Tile start, Tile destination)
+    {
+        List<PathNode> path = null;
+        do
+        {
+            path = GetComponent<PathFinder>().FindPath(start, destination);
+        } while (path == null);
+
+        return path;
+    }
+    void AddRoadToAllPaths(List<PathNode> path)
+    {
+        foreach (var road in path)
+        {
+            AllPaths.Add(road);
+            road.GetTile().MakeTileRoad();
         }
     }
 
@@ -177,25 +182,25 @@ public class WorldBuilder : MonoBehaviour
         {
             tileToUse = PoolBoss.GetUsedObject<Tile.GroundTile>(Random.Range(0, Settings.GetTotalTileAmount() - 1));
         } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
-        
-        //TODO: Change these up a bit
-        Quaternion rotation = tileToUse.transform.rotation;
+
+        Quaternion rotation = Random.rotation;
+        rotation.x = 0;
+        rotation.z = 0;
         Vector3 position = tileToUse.transform.position;
         position.y = 0.5f;
         
         building.name = name;
         SetPositionAndRotation(building, position, rotation);
 
-        building.GetComponent<Building>().SetParentTile(tileToUse);
+        building.GetComponent<Building>().SetParentTile(tileToUse.GetComponent<Tile>());
         building.GetComponent<Building>().Init();
     }
 
     //VEHICLE
     void PrepVehicles()
     {
-        for(int i = 0; i < Settings.GetNumberOfConsumers() * Settings.GetVehiclesPerConsumer(); i++)
+        for(int i = 0; i < Settings.GetNumberOfVehicles(); i++)
         {
-            //TODO: Make a GetAll function for the pools?
             var vehicle = PoolBoss.GetObject<Vehicle>(i);
             vehicle.GetComponent<RoITestObject>().Init();
         }

@@ -3,6 +3,8 @@
 public class Tile : RoITestObject
 {
     [SerializeField] Material BaseMaterial;
+    [SerializeField] Material RoadMaterial;
+
     Building ChildBuilding;
 
     public override void Init()
@@ -10,6 +12,12 @@ public class Tile : RoITestObject
         GetComponent<NavMeshSourceTag>().enabled = false;
         SetMaterial(BaseMaterial);
         SetChildBuilding(null);
+    }
+
+    public void MakeTileRoad()
+    {
+        GetComponent<NavMeshSourceTag>().enabled = true;
+        SetMaterial(RoadMaterial);
     }
 
     public Building GetChildBuilding()

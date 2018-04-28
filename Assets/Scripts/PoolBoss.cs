@@ -39,7 +39,7 @@ public class PoolBoss : MonoBehaviour
         ConsumerPool = new ResourcePool(Settings.GetNumberOfConsumers(), ConsumerBuilding);
         ProducerPool = new ResourcePool(Settings.GetNumberOfProducers(), ProducerBuilding);
 
-        VehiclePool = new ResourcePool(Settings.GetNumberOfConsumers() * Settings.GetVehiclesPerConsumer(), Vehicle);
+        VehiclePool = new ResourcePool(Settings.GetNumberOfVehicles(), Vehicle);
     }
     public void ResetPools()
     {

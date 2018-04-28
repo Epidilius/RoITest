@@ -6,7 +6,7 @@ public class Building : RoITestObject
 {
     int MaxProducts = 999;
     int CurrentProductAmount = 0;
-    GameObject ParentTile;  //TODO: Tile?
+    Tile ParentTile;
     GameObject Endpoint;
 
     public override void Init()
@@ -39,11 +39,11 @@ public class Building : RoITestObject
         MaxProducts = max;
     }
 
-    public GameObject GetParentTile()
+    public Tile GetParentTile()
     {
         return ParentTile;
     }
-    public void SetParentTile(GameObject tile)
+    public void SetParentTile(Tile tile)
     {
         ParentTile = tile;
     }
