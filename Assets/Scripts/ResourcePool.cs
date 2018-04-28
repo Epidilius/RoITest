@@ -27,7 +27,6 @@ public class ResourcePool : MonoBehaviour{
         for (int i = 0; i < PoolSize; i++)
         {
             var item = Instantiate(PoolType);
-            SetStatusOfComponents(item, false);
             UnusedObjectPool.Add(item);
             AllObjectPool.Add(item);
         }
@@ -45,7 +44,10 @@ public class ResourcePool : MonoBehaviour{
 
     public GameObject GetUnusedObject()
     {
-        if (UnusedObjectPool.Count < 1) return null;
+        if (UnusedObjectPool.Count < 1)
+        {
+            return null;
+        }
 
         var item = UnusedObjectPool[0];
         SetStatusOfComponents(item, true);
@@ -63,6 +65,7 @@ public class ResourcePool : MonoBehaviour{
     {
         return IsIndexValid(index, AllObjectPool) ? AllObjectPool[index] : null;
     }
+
     public void RemoveItemFromUsedPool(GameObject item)
     {
         UsedObjectPool.Remove(item);

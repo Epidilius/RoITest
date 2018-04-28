@@ -31,7 +31,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4159810370335600
 Transform:
   m_ObjectHideFlags: 1
@@ -132,3 +132,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseMaterial: {fileID: 2100000, guid: 8f7a2fb032ab98f48850e13745417959, type: 2}
+  RoadMaterial: {fileID: 2100000, guid: cc95abb4342e4a8408c66915164ce0a1, type: 2}

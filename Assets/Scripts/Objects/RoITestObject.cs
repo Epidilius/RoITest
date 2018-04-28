@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class RoITestObject : MonoBehaviour {
-
+public abstract class RoITestObject : MonoBehaviour
+{
     public abstract void Init();
 }

@@ -2,27 +2,25 @@
 
 public class PoolBoss : MonoBehaviour
 {
-
     //TODO: Make this a Job
-
     #region VARIABLES 
     //TILES 
     [SerializeField] GameObject GroundTile;
     [SerializeField] GameObject EndpointTile;
 
-    public ResourcePool GroundTilePool;
-    public ResourcePool EndpointTilePool;
+    ResourcePool GroundTilePool;
+    ResourcePool EndpointTilePool;
 
     //BUILDINGS 
     [SerializeField] GameObject ConsumerBuilding;
     [SerializeField] GameObject ProducerBuilding;
 
-    public ResourcePool ConsumerPool;
-    public ResourcePool ProducerPool;
+    ResourcePool ConsumerPool;
+    ResourcePool ProducerPool;
 
     //VEHICLES 
     [SerializeField] GameObject Vehicle;
-    public ResourcePool VehiclePool;
+    ResourcePool VehiclePool;
     #endregion
 
     void Awake()
@@ -64,6 +62,7 @@ public class PoolBoss : MonoBehaviour
     
     public GameObject GetUnusedObject<T>()
     {
+
         if (typeof(T) == typeof(Vehicle))                   return VehiclePool.GetUnusedObject();
 
         else if (typeof(T) == typeof(Tile.GroundTile))      return GroundTilePool.GetUnusedObject();

@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4073814022214670
 Transform:
   m_ObjectHideFlags: 1
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8902d92d74cb25b40922c3a9ee1579d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClosestProducer: {fileID: 0}
+  VehicleCooldownDuration: 0
 --- !u!114 &114809899808911028
 MonoBehaviour:
   m_ObjectHideFlags: 1

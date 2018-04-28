@@ -4,11 +4,9 @@ using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
 {
-    #region VARIABLES 
     [SerializeField] PoolBoss PoolBoss;
     List<PathNode> AllPaths;
-    #endregion
-
+ 
     void Start()
     {
         //NavMeshPath = new NavMeshPath();
@@ -44,8 +42,7 @@ public class WorldBuilder : MonoBehaviour
         ClearNavMesh();
         AllPaths.Clear();
     }
-
-    //NAV MESH FUNCTIONS
+    
     void SetupNavBuilder()
     {
         var bounds = GameObject.Find("NavMeshBuildingBounds");
@@ -68,8 +65,7 @@ public class WorldBuilder : MonoBehaviour
             AllPaths[i].GetComponent<NavMeshSourceTag>().enabled = false;
         }
     }
-
-    //TILE FUNCTIONS
+    
     void SpawnGroundTiles()
     {
         Vector3 tilePlacementPosition = Vector3.zero;
@@ -108,10 +104,10 @@ public class WorldBuilder : MonoBehaviour
         endpoint.GetComponent<Tile>().SetChildBuilding(building.GetComponent<Building>());
 
         var position = building.transform.position;
-        position.x += 1.5f;    //TODO: Randomize the X and Z, to be either -1.5 or 1.5
+        position.x += 1.5f;
         position.y = 0.1f;
         var rotation = building.transform.rotation;
-        rotation.y = 1;   //TODO: Based on the XY the rotation should be
+        rotation.y = 1;
 
         endpoint.AddComponent(typeof(NavMeshSourceTag));
 
@@ -158,8 +154,7 @@ public class WorldBuilder : MonoBehaviour
             road.GetTile().MakeTileRoad();
         }
     }
-
-    //BUILDING FUNCTIONS
+    
     void SpawnConsumers()
     {
         for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
@@ -183,9 +178,7 @@ public class WorldBuilder : MonoBehaviour
             tileToUse = PoolBoss.GetUsedObject<Tile.GroundTile>(Random.Range(0, Settings.GetTotalTileAmount() - 1));
         } while (tileToUse.GetComponent<Tile>().GetChildBuilding() != null);
 
-        Quaternion rotation = Random.rotation;
-        rotation.x = 0;
-        rotation.z = 0;
+        Quaternion rotation = tileToUse.transform.rotation;
         Vector3 position = tileToUse.transform.position;
         position.y = 0.5f;
         
@@ -196,7 +189,6 @@ public class WorldBuilder : MonoBehaviour
         building.GetComponent<Building>().Init();
     }
 
-    //VEHICLE
     void PrepVehicles()
     {
         for(int i = 0; i < Settings.GetNumberOfVehicles(); i++)

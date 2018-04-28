@@ -21,9 +21,7 @@ public class Producer : Building
             CreateProduct();
         }
     }
-
-
-    //PRODUCT RELATED
+    
     void CreateProduct()
     {
         AddOneProduct();
@@ -35,7 +33,6 @@ public class Producer : Building
         TimeToNextProduct = ProductionTimeInMinutes;
     }
 
-    //VEHICLE RELATED
     public override void VehicleArrived(GameObject vehicle)
     {
         RemoveOneProduct();

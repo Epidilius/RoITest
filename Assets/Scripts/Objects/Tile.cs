@@ -4,7 +4,6 @@ public class Tile : RoITestObject
 {
     [SerializeField] Material BaseMaterial;
     [SerializeField] Material RoadMaterial;
-
     Building ChildBuilding;
 
     public override void Init()
@@ -20,6 +19,11 @@ public class Tile : RoITestObject
         SetMaterial(RoadMaterial);
     }
 
+    void SetMaterial(Material mat)
+    {
+        GetComponent<Renderer>().material = mat;
+    }
+
     public Building GetChildBuilding()
     {
         return ChildBuilding;
@@ -29,16 +33,12 @@ public class Tile : RoITestObject
         ChildBuilding = child;
     }
 
-    public void SetMaterial(Material mat)
-    {
-        GetComponent<Renderer>().material = mat;
-    }
-
     public PathNode GetPathNode()
     {
         return GetComponent<PathNode>();
     }
     
+    //These are for typing
     public partial class GroundTile
     {
 

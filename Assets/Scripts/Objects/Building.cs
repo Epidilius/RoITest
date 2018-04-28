@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Building : RoITestObject
 {
@@ -47,6 +45,7 @@ public class Building : RoITestObject
     {
         ParentTile = tile;
     }
+
     public GameObject GetEndpoint()
     {
         return Endpoint.transform.Find("Destination").gameObject;
@@ -55,6 +54,7 @@ public class Building : RoITestObject
     {
         Endpoint = endpoint;
     }
+
     public virtual void VehicleArrived(GameObject vehicle)
     {
 

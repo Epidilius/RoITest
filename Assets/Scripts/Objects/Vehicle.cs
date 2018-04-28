@@ -21,6 +21,11 @@ public class Vehicle : RoITestObject
         CurrentState = VehicleState.Inactive;
     }
 
+    public override void Init()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void SetConsumer(GameObject consumer)
     {
         Consumer = consumer;
@@ -29,6 +34,7 @@ public class Vehicle : RoITestObject
     {
         Producer = producer;
     }
+
     public void SetTransform(Transform newTransform)
     {
         gameObject.GetComponent<NavMeshAgent>().Warp(newTransform.position);
@@ -76,10 +82,5 @@ public class Vehicle : RoITestObject
     {
         Agent.isStopped = true;
         buildingObject.transform.parent.GetComponent<Tile>().GetChildBuilding().VehicleArrived(gameObject);
-    }
-
-    public override void Init()
-    {
-        gameObject.SetActive(false);
     }
 }

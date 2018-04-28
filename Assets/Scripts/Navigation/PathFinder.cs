@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathFinder : MonoBehaviour
 {
+    #region VARIABLES 
     //MATERIALS
     public Material OpenPathMat;
     public Material ClosedPathMat;
@@ -24,6 +25,7 @@ public class PathFinder : MonoBehaviour
     List<PathNode> PathNodeClosed;
     List<PathNode> PathNodeFinal;
     List<Tile> AdjacentNodes;
+    #endregion
 
     //TODO: Make this a Job
     private void Awake()
@@ -120,7 +122,6 @@ public class PathFinder : MonoBehaviour
         return null;
     }
 
-    //DATA FETCHERS
     public bool IsSearchingForPath()
     {
         return CurrentState == PathFinderState.StateSearchingPath;
@@ -190,17 +191,6 @@ public class PathFinder : MonoBehaviour
     {
         var matches = PathNodeClosed.Where(x => x.GetTile() == tile);
         return matches.Count() > 0;
-        //int tileIndex = GetTileIndex(tile);
-
-        //for (int i = 0; i < PathNodeClosed.Count; i++)
-        //{
-        //    if (GetTileIndex(PathNodeClosed[i].GetTile()) == tileIndex)
-        //    {
-        //        return true;
-        //    }
-        //}
-
-        //return false;
     }
     bool DoesTileExistInOpenList(Tile tile) 
     {
@@ -248,27 +238,13 @@ public class PathFinder : MonoBehaviour
     {
         for(int i = 0; i < nodes.Count; i++)
         {
-            ClearParentsFromNode(nodes[i]);
+            nodes[i].SetParent(null);
         }
-    }
-    void ClearParentsFromNode(PathNode node)
-    {
-        node.SetParent(null);
     }
 
     PathNode GetOpenPathNodeForTile(Tile tile)
     {
-        int tileIndex = GetTileIndex(tile);
-
-        for(int i = 0; i < PathNodeOpen.Count; i++)
-        {
-            if(GetTileIndex(PathNodeOpen[i].GetTile()) == tileIndex)
-            {
-                return PathNodeOpen[i];
-            }
-        }
-
-        return null;
+        return PathNodeOpen.SingleOrDefault(x => x.GetTile() == tile);
     }
     int GetManhattanDistanceCost(Tile startTile, Tile destinationTile)
     {

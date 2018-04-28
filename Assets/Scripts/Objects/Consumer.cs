@@ -48,7 +48,7 @@ public class Consumer : Building
     void SendVehicle()
     {
         Debug.Log(name + " sending vehicle to " + ClosestProducer.name);
-        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Better way of doing this. Maybe assign each consumer a vehicle?
+        var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Assign each consumer a vehicle?
         PrepVehicle(vehicle.GetComponent<Vehicle>());
 
         if (!vehicle.GetComponent<Vehicle>().StartDriving())
