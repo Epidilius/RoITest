@@ -60,8 +60,6 @@ public class Vehicle : RoITestObject
     {
         if(other.tag == "Destination")
         {
-            //TODO: Pause, then continue
-            //TODO: Undupe this code
             if (other.gameObject == Consumer && CurrentState != VehicleState.AtConsumer && Vector3.Distance(Agent.destination, Consumer.transform.position) < 0.2)
             {
                 CurrentState = VehicleState.AtConsumer;
@@ -82,6 +80,7 @@ public class Vehicle : RoITestObject
 
     public override void Init()
     {
-        
+        //TODO: A better way
+        gameObject.SetActive(false);
     }
 }

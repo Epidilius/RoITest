@@ -14,7 +14,7 @@ public class ResourcePool : MonoBehaviour{
     {
         PoolSize = size;
         PoolType = objectPooled;
-        UnusedPosition = new Vector3(-1000, -1000, -1000);  //TODO: Necessary?
+        UnusedPosition = new Vector3(-1000, -1000, -1000);
         UnusedObjectPool = new List<GameObject>();
         UsedObjectPool = new List<GameObject>();
         AllObjectPool = new List<GameObject>();
@@ -39,7 +39,6 @@ public class ResourcePool : MonoBehaviour{
         
         foreach (var item in clone)
         {
-            //item.GetComponent<RoITestObject>().Init();
             RemoveItemFromUsedPool(item);
         }
     }
@@ -76,7 +75,7 @@ public class ResourcePool : MonoBehaviour{
     {
         return (index < pool.Count && index >= 0);
     }
-    void SetStatusOfComponents(GameObject item, bool enabled)   //TODO: Do I need the ref?
+    void SetStatusOfComponents(GameObject item, bool enabled)
     {
         item.gameObject.SetActive(enabled);
         if (enabled == false) item.transform.position = UnusedPosition;

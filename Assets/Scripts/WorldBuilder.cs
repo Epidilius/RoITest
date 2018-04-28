@@ -37,6 +37,8 @@ public class WorldBuilder : MonoBehaviour
 
         SpawnEndpointTiles();
         SpawnRoadTiles();
+
+        PrepVehicles();
     }
     void ResetWorld()
     {
@@ -186,6 +188,17 @@ public class WorldBuilder : MonoBehaviour
 
         building.GetComponent<Building>().SetParentTile(tileToUse);
         building.GetComponent<Building>().Init();
+    }
+
+    //VEHICLE
+    void PrepVehicles()
+    {
+        for(int i = 0; i < Settings.GetNumberOfConsumers() * Settings.GetVehiclesPerConsumer(); i++)
+        {
+            //TODO: Make a GetAll function for the pools?
+            var vehicle = PoolBoss.GetObject<Vehicle>(i);
+            vehicle.GetComponent<RoITestObject>().Init();
+        }
     }
    
     void SetPositionAndRotation(GameObject gameObject, Vector3 position, Quaternion rotation)

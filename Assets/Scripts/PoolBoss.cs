@@ -10,19 +10,19 @@ public class PoolBoss : MonoBehaviour
     [SerializeField] GameObject GroundTile;
     [SerializeField] GameObject EndpointTile;
 
-    ResourcePool GroundTilePool;
-    ResourcePool EndpointTilePool;
+    public ResourcePool GroundTilePool;
+    public ResourcePool EndpointTilePool;
 
     //BUILDINGS 
     [SerializeField] GameObject ConsumerBuilding;
     [SerializeField] GameObject ProducerBuilding;
 
-    ResourcePool ConsumerPool;
-    ResourcePool ProducerPool;
+    public ResourcePool ConsumerPool;
+    public ResourcePool ProducerPool;
 
     //VEHICLES 
     [SerializeField] GameObject Vehicle;
-    ResourcePool VehiclePool;
+    public ResourcePool VehiclePool;
     #endregion
 
     void Awake()

@@ -9,8 +9,8 @@ public class Consumer : Building
 
     public override void Init()
     {
-        VehicleCooldownDuration = Settings.GetMinutesToMakeProduct();
-        CurrentVehicleAmount = Settings.GetVehicleCooldownDuration();
+        VehicleCooldownDuration = Settings.GetVehicleCooldownDuration();
+        CurrentVehicleAmount = Settings.GetVehiclesPerConsumer();
 
         ResetVehicleCooldown();
         ResetProduct();
@@ -47,6 +47,7 @@ public class Consumer : Building
 
     void SendVehicle()
     {
+        Debug.Log(name + " sending vehicle to " + ClosestProducer.name);
         var vehicle = GameObject.Find("WorldBoss").GetComponent<PoolBoss>().GetUnusedObject<Vehicle>();  //TODO: Better way of doing this
         PrepVehicle(vehicle.GetComponent<Vehicle>());
 
