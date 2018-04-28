@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class WorldBuilder : MonoBehaviour
 {
@@ -87,7 +86,7 @@ public class WorldBuilder : MonoBehaviour
     }
     void SpawnEndpointTiles()
     {
-        for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
+        for (int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
             CreateEndpointAtBuilding(PoolBoss.GetUsedObject<Consumer>(i));
         }
@@ -115,7 +114,7 @@ public class WorldBuilder : MonoBehaviour
     }
     void SpawnRoadTiles()
     {
-        for(int i = 0; i < Settings.GetNumberOfConsumers(); i ++)
+        for (int i = 0; i < Settings.GetNumberOfConsumers(); i ++)
         {
             var consumer = PoolBoss.GetUsedObject<Consumer>(i);
             float shortestDistance = Mathf.Infinity;
@@ -157,7 +156,7 @@ public class WorldBuilder : MonoBehaviour
     
     void SpawnConsumers()
     {
-        for(int i = 0; i < Settings.GetNumberOfConsumers(); i++)
+        for (int i = 0; i < Settings.GetNumberOfConsumers(); i++)
         {
             CreateBuilding<Consumer>("Consumer #" + i);
         }
@@ -186,12 +185,13 @@ public class WorldBuilder : MonoBehaviour
         SetPositionAndRotation(building, position, rotation);
 
         building.GetComponent<Building>().SetParentTile(tileToUse.GetComponent<Tile>());
+        tileToUse.GetComponent<Tile>().SetChildBuilding(building.GetComponent<Building>());
         building.GetComponent<Building>().Init();
     }
 
     void PrepVehicles()
     {
-        for(int i = 0; i < Settings.GetNumberOfVehicles(); i++)
+        for (int i = 0; i < Settings.GetNumberOfVehicles(); i++)
         {
             var vehicle = PoolBoss.GetObject<Vehicle>(i);
             vehicle.GetComponent<RoITestObject>().Init();
