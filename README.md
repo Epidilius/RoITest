@@ -1,8 +1,8 @@
-#Rise of Industry Code Test
+# Rise of Industry Code Test
 
 ----  ----  ----  ----
 
-###Controls
+### Controls
 
 WASD - Move around
 
@@ -14,7 +14,7 @@ R - Rebuild world
 
 ----  ----  ----  ----
 
-###Game Behaviour
+### Game Behaviour
 
 Producers create products at a rate of once per minute, by default. If a consumer has a vehicle ready, it will dispatch it to the producer. Vehicle readiness is determined by three factors:
 
@@ -36,6 +36,6 @@ These times, as well as some other values, can be modified in the Settings.cs fi
 
 ----  ----  ----  ----
 
-###Misc Technical Stuff
+### Misc Technical Stuff
 
 There are two different types of navigation in the project. A* is used to find paths between consumers and producers. Unity's NavMesh system is used to navigate the cars on the road tiles.
